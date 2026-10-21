@@ -5,7 +5,7 @@
 --    Supabase API roles (anon, authenticated), so the auto-generated REST/GraphQL
 --    API cannot read or write this data even if the anon key leaks.
 -- 3. A least-privilege runtime role, leo_app, is created WITHOUT login. An
---    operator enables it out-of-band (see docs/database.md) so no password ever
+--    operator enables it out-of-band (see docs/setup.md) so no password ever
 --    lives in a migration. The application authorizes every operation itself;
 --    the role limits blast radius (no DDL, no deletes of published records,
 --    no audit-log tampering).

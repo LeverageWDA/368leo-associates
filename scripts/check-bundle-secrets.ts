@@ -12,7 +12,10 @@ const PATTERNS: [string, RegExp][] = [
   ['Postgres connection string', /postgres(?:ql)?:\/\/[^\s"'`]+:[^\s"'`]+@/],
   ['Clerk secret key', /\bsk_(?:live|test)_[A-Za-z0-9]{10,}/],
   ['Supabase service role reference', /service_role/],
-  ['Server env var name', new RegExp(`\\b(?:${SERVER_ONLY_VARS.join('|')})\\b`)],
+  // A server variable name paired with a value (e.g. a serialized env object).
+  // Bare references such as `process.env.CLERK_SECRET_KEY` inside third-party
+  // client code are not leaks: in the browser they read an empty object.
+  ['Server env var with value', new RegExp(`["']?\\b(?:${SERVER_ONLY_VARS.join('|')})\\b["']?\\s*[:=]\\s*["'][^"']{6,}`)],
 ];
 
 function* files(dir: string): Generator<string> {

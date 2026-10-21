@@ -11,7 +11,7 @@ export type ActionResult<T> =
  * Wraps a server action so authorization and validation happen at the
  * operation boundary, in that order, before any business logic runs.
  * Next.js already rejects server-action POSTs whose Origin does not match the
- * host, which is our CSRF protection for actions (see docs/security.md).
+ * host, which is our CSRF protection for actions (see docs/setup.md).
  */
 export function adminAction<S extends z.ZodType, T>(
   permission: Permission,
