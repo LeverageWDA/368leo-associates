@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+
+/* Admin theme: light surfaces, black type, gold accents (same palette as the public site). */
+@theme {
+  --color-canvas: #f7f6f2;
+  --color-surface: #ffffff;
+  --color-ink: #111110;
+  --color-muted: #6b6862;
+  --color-line: #e4e2db;
+  --color-gold: #d4af37;
+  --color-gold-deep: #a8830f;
+  --color-gold-text: #8a6a0f;
+  --color-danger: #b42318;
+  --font-sans: var(--ff-body), Inter, Arial, sans-serif;
+  --font-heading: var(--ff-display), Arial, sans-serif;
+  --font-serif: var(--ff-serif), Georgia, serif;
+  --font-mono: var(--ff-mono), ui-monospace, Menlo, monospace;
+}
+
+@layer base {
+  body { @apply bg-canvas text-ink font-sans antialiased; }
+  :focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+  ::selection { background: #ffd700; color: var(--color-ink); }
+}
