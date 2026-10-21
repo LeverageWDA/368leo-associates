@@ -4,11 +4,19 @@ A custom, mobile-first music-label frontend. **Concept only:** no invented artis
 
 ## Run locally
 
+Requires Node.js 20.9 or newer (22 LTS recommended). No credentials are needed
+for the public site.
+
 ```bash
-python3 -m http.server 3000
+npm install
+npm run dev
 ```
 
-Then visit http://localhost:3000.
+Then visit http://localhost:3000. The admin area (`/admin`) stays locked (503)
+until Supabase and Clerk are configured; see `docs/setup.md`.
+
+The original static prototype is kept in `prototype/` for reference
+(`cd prototype && python3 -m http.server 3001`).
 
 ## Design system
 
