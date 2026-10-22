@@ -4,15 +4,12 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 /*
- * Port of the prototype's script.js. Behaviour is unchanged; the differences
- * are React lifecycle concerns: every listener, observer and animation frame is
- * torn down on unmount, every element lookup tolerates the element being
- * absent (so the same layout works on pages without a listening room), and the
- * effect re-runs on route change.
- *   1. Mobile menu
- *   2. Player overlay + mini player
- *   3. Choreography: line reveals, scroll-linked art, marquee velocity,
- *      nav progress / auto-hide, magnetic buttons, nebula pointer drift
+ * Scroll and pointer choreography ported from the prototype's script.js:
+ * line reveals, display-line fit guard, scroll-linked record art, marquee
+ * velocity, nav progress / auto-hide, magnetic buttons, nebula pointer drift.
+ * Every listener, observer and frame is torn down on unmount, every lookup
+ * tolerates a missing element (not all pages have every section), and the
+ * effect re-runs on route change. The menu and player are React components.
  */
 export function SiteEffects() {
   const pathname = usePathname();
@@ -34,98 +31,8 @@ export function SiteEffects() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    /* ---------- 1. Mobile menu ---------- */
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    function setMenu(open: boolean) {
-      if (!menuToggle || !mobileMenu) return;
-      mobileMenu.classList.toggle('active', open);
-      menuToggle.classList.toggle('active', open);
-      menuToggle.setAttribute('aria-expanded', String(open));
-      menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      mobileMenu.setAttribute('aria-hidden', String(!open));
-      body.classList.toggle('menu-open', open);
-    }
-    const closeMenu = () => setMenu(false);
-    menuToggle?.addEventListener('click', () => setMenu(!mobileMenu?.classList.contains('active')), { signal });
-    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu, { signal }));
-
-    /* ---------- 2. Player overlay ---------- */
-    const overlay = document.getElementById('playerOverlay');
-    const closeBtn = document.getElementById('closePlayer');
-    let previousFocus: HTMLElement | null = null;
-
-    function openPlayer() {
-      if (!overlay) return;
-      previousFocus = document.activeElement as HTMLElement | null;
-      overlay.classList.add('active');
-      overlay.setAttribute('aria-hidden', 'false');
-      body.classList.add('overlay-open');
-      // wait a frame so the dialog is visible before moving focus into it
-      raf(() => raf(() => closeBtn?.focus()));
-    }
-    function closePlayer() {
-      if (!overlay) return;
-      overlay.classList.remove('active');
-      overlay.setAttribute('aria-hidden', 'true');
-      body.classList.remove('overlay-open');
-      previousFocus?.focus();
-    }
-    document.getElementById('openPlayer')?.addEventListener('click', openPlayer, { signal });
-    document.getElementById('expandPlayer')?.addEventListener('click', openPlayer, { signal });
-    closeBtn?.addEventListener('click', closePlayer, { signal });
-
-    document.addEventListener(
-      'keydown',
-      e => {
-        const overlayOpen = overlay?.classList.contains('active');
-        if (e.key === 'Escape') {
-          if (overlayOpen) closePlayer();
-          else closeMenu();
-        }
-        if (e.key === 'Tab' && overlayOpen && overlay) {
-          const focusables = [...overlay.querySelectorAll<HTMLElement>('button:not([disabled]),a[href]')];
-          const first = focusables[0];
-          const last = focusables[focusables.length - 1];
-          if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last?.focus();
-          } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first?.focus();
-          }
-        }
-      },
-      { signal },
-    );
-
-    /* mini player appears once the listening room has scrolled past */
-    const mini = document.getElementById('miniPlayer');
+    // The listening room drives the pointer-following glow below.
     const experience = document.getElementById('experience');
-    if (mini && experience) {
-      const io = new IntersectionObserver(
-        entries => {
-          for (const entry of entries) {
-            const on = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-            mini.classList.toggle('visible', on);
-            body.classList.toggle('mini-on', on);
-          }
-        },
-        { threshold: 0 },
-      );
-      io.observe(experience);
-      observers.push(io);
-    }
-    /* park it while the footer is on screen so it never covers footer links */
-    const footer = document.querySelector('.footer');
-    if (mini && footer) {
-      const io = new IntersectionObserver(([entry]) => mini.classList.toggle('parked', !!entry?.isIntersecting), {
-        threshold: 0,
-      });
-      io.observe(footer);
-      observers.push(io);
-    }
 
     /* ---------- 3a. Fit guard: no display line may overflow its column ---------- */
     function fitLines() {
@@ -286,7 +193,7 @@ export function SiteEffects() {
       observers.forEach(o => o.disconnect());
       frames.forEach(id => cancelAnimationFrame(id));
       clearTimeout(resizeTimer);
-      body.classList.remove('menu-open', 'overlay-open', 'nav-hidden', 'mini-on');
+      body.classList.remove('nav-hidden');
     };
   }, [pathname]);
 

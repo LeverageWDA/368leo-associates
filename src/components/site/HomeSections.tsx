@@ -1,9 +1,15 @@
+import Link from 'next/link';
+import { PLATFORM_LABEL, RELEASE_TYPE_LABEL, isSafeExternalUrl, playableTracks, type Release, type SocialLink } from '@/lib/catalog';
+import { OpenPlayerButton, PlayReleaseButton } from '@/components/music/PlayReleaseButton';
+import { ReleaseSleeve } from '@/components/music/ReleaseSleeve';
+import { TrackList } from '@/components/music/TrackList';
+import { Turntable } from '@/components/turntable/Turntable';
+import { SocialLinks } from './SocialLinks';
+
 /*
- * Homepage sections, ported 1:1 from the approved static prototype
- * (prototype/index.html). Copy here is the approved concept copy; every slot
- * that needs client-supplied information is labelled as pending rather than
- * filled with invented content. Phase 4 feeds these from site_content and
- * published releases.
+ * Homepage sections. Hero and marquee are the approved prototype markup. The
+ * other sections render the featured *published* release when one exists and
+ * a labelled empty state when it does not — never invented content.
  */
 
 export function Hero() {
@@ -48,11 +54,11 @@ export function Marquee() {
   );
 }
 
-export function FeaturedRelease() {
+export function FeaturedRelease({ release }: { release: Release | null }) {
   return (
     <section className="release section-pad" id="release">
       <div className="section-heading" data-reveal>
-        <div className="section-id"><span className="small-cross">✳</span> 01 / FEATURED RELEASE</div>
+        <div className="section-id"><span className="small-cross" aria-hidden="true">✳</span> FEATURED RELEASE</div>
         <p>ONE RELEASE.<br />AN ENTIRE WORLD TO EXPLORE.</p>
       </div>
       <div className="release-layout">
@@ -61,28 +67,47 @@ export function FeaturedRelease() {
             <div className="disc release-disc" aria-hidden="true">
               <div className="disc-label"><span>L<b>&amp;</b>A</span><small>SIDE A</small></div>
             </div>
-            <div className="release-art" role="img" aria-label="Placeholder for official EP cover artwork">
-              <div className="art-grid" aria-hidden="true"></div>
-              <div className="art-top"><span>LEO &amp; ASSOCIATES</span><span>RELEASE 001</span></div>
-              <div className="art-monogram">L<span>&amp;</span>A</div>
-              <div className="art-sheen"></div>
-              <div className="art-bottom"><span>THE FEATURED<br />RELEASE</span><span>OFFICIAL ARTWORK<br />COMING SOON</span></div>
-            </div>
+            {release?.coverUrl ? (
+              <div className="release-art release-art-cover"><ReleaseSleeve release={release} size="lg" /></div>
+            ) : (
+              <div className="release-art" role="img" aria-label="Placeholder for the official cover artwork">
+                <div className="art-grid" aria-hidden="true"></div>
+                <div className="art-top"><span>LEO &amp; ASSOCIATES</span><span>{release ? RELEASE_TYPE_LABEL[release.type].toUpperCase() : 'RELEASE'}</span></div>
+                <div className="art-monogram">L<span>&amp;</span>A</div>
+                <div className="art-sheen"></div>
+                <div className="art-bottom"><span>THE FEATURED<br />RELEASE</span><span>OFFICIAL ARTWORK<br />COMING SOON</span></div>
+              </div>
+            )}
           </div>
-          <span className="art-caption">[ ARTWORK PLACEHOLDER — REPLACE WITH THE OFFICIAL EP COVER ]</span>
+          {!release?.coverUrl && <span className="art-caption">Artwork placeholder — the official cover will replace it.</span>}
         </div>
         <div className="release-content" data-reveal>
-          <span className="eyebrow">THE FIRST CHAPTER / 001</span>
-          <h2 className="split"><span className="line"><span>THE</span></span><span className="line"><em>RELEASE<span className="period">.</span></em></span></h2>
-          <p className="release-desc">One project at the center of it all. Explore the music, discover the tracks, and find where to listen or purchase.</p>
-          <div className="release-meta">
-            <div><span>FORMAT</span><strong>EXTENDED PLAY / EP</strong></div>
-            <div><span>ARTIST</span><strong>TO BE CONFIRMED</strong></div>
-            <div><span>AVAILABILITY</span><strong>APPLE MUSIC · SHOPIFY</strong></div>
-          </div>
+          <span className="eyebrow">{release ? `${RELEASE_TYPE_LABEL[release.type].toUpperCase()}${release.releaseDate ? ` / ${release.releaseDate.slice(0, 4)}` : ''}` : 'THE FIRST CHAPTER'}</span>
+          {release ? (
+            <h2 className="release-title-live">{release.title}</h2>
+          ) : (
+            <h2 className="split"><span className="line"><span>THE</span></span><span className="line"><em>RELEASE<span className="period">.</span></em></span></h2>
+          )}
+          <p className="release-desc">
+            {release?.description ?? 'One project at the center of it all. Explore the music, discover the tracks, and find where to listen or purchase.'}
+          </p>
+          <dl className="release-meta">
+            <div><dt>FORMAT</dt><dd>{release ? RELEASE_TYPE_LABEL[release.type].toUpperCase() : 'EXTENDED PLAY / EP'}</dd></div>
+            <div><dt>ARTIST</dt><dd>{release ? <Link href={`/artists/${release.artist.slug}`}>{release.artist.name.toUpperCase()}</Link> : 'TO BE CONFIRMED'}</dd></div>
+            <div><dt>AVAILABILITY</dt><dd>{release && release.links.length ? release.links.map(l => PLATFORM_LABEL[l.platform]).join(' · ').toUpperCase() : 'LINKS PENDING'}</dd></div>
+          </dl>
           <div className="release-actions">
-            <a href="#experience" className="btn btn-black"><b>EXPLORE THE MUSIC</b> <span>↗</span></a>
-            <a href="#platforms" className="btn btn-outline"><b>WHERE TO LISTEN</b> <span>↗</span></a>
+            {release ? (
+              <>
+                <Link href={`/music/${release.slug}`} className="btn btn-black"><b>OPEN THE RELEASE</b> <span aria-hidden="true">↗</span></Link>
+                <PlayReleaseButton release={release} className="btn btn-outline" />
+              </>
+            ) : (
+              <>
+                <Link href="/music" className="btn btn-black"><b>EXPLORE THE MUSIC</b> <span aria-hidden="true">↗</span></Link>
+                <a href="#platforms" className="btn btn-outline"><b>WHERE TO LISTEN</b> <span aria-hidden="true">↓</span></a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -90,64 +115,94 @@ export function FeaturedRelease() {
   );
 }
 
-export function ListeningRoom() {
+export function ListeningRoom({ release }: { release: Release | null }) {
+  const tracks = release ? playableTracks(release) : [];
   return (
-    <section className="experience" id="experience">
+    <section className="experience" id="experience" aria-labelledby="listenTitle">
       <div className="nebula" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div className="experience-top"><span>02 / LISTENING ROOM</span><span>TURN THE VOLUME UP ↗</span></div>
+      <div className="experience-top"><span>LISTENING ROOM</span><span>TURN THE VOLUME UP</span></div>
       <div className="experience-title">
-        <h2 className="split">
+        <h2 className="split" id="listenTitle">
           <span className="line"><span>DON&apos;T JUST</span></span>
           <span className="line"><span>SEE IT.</span></span>
           <span className="line line-feel"><em>FEEL IT.</em></span>
         </h2>
-        <p data-reveal>A space for the music.<br />Nothing in the way.</p>
+        <p data-reveal>Put your hand on the record.<br />Drag it to scratch, let go to drop back in.</p>
       </div>
       <div className="player-layout">
-        <div className="player-cover" role="img" aria-label="Placeholder album artwork">
+        <div className="player-cover player-deck">
           <div className="orbit orbit-1" aria-hidden="true"></div>
           <div className="orbit orbit-2" aria-hidden="true"></div>
-          <div className="orbit orbit-3" aria-hidden="true"><b></b></div>
-          <div className="player-cover-circle"><div className="player-cover-inner">L<span>&amp;</span>A</div></div>
-          <span className="player-cover-label">FEATURED EP / 001</span>
-          <span className="player-cover-status"><i></i>AUDIO PENDING</span>
+          <Turntable tracks={tracks} labelNote={release?.catalogueNumber ?? undefined} labelImage={release?.coverUrl} />
+          {tracks.length === 0 && <span className="player-cover-status"><i></i>AUDIO PENDING</span>}
         </div>
         <div className="track-panel" data-reveal>
-          <div className="track-panel-top"><span>THE TRACKLIST</span><span>PREVIEW MODE</span></div>
-          <div className="track-placeholder"><span className="track-index">01—</span><div><strong>Track details coming soon</strong><p>The official EP tracklist hasn&apos;t been supplied yet.</p></div><span className="track-symbol">↗</span></div>
-          <div className="track-placeholder"><span className="track-index">02—</span><div><strong>Listen on the official platforms</strong><p>Audio playback will activate when licensed files are added.</p></div><span className="track-symbol">↗</span></div>
+          <div className="track-panel-top"><span>{release ? release.title.toUpperCase() : 'THE TRACKLIST'}</span><span>{tracks.length ? `${tracks.length} PLAYABLE` : 'NO AUDIO YET'}</span></div>
+          {release ? (
+            <TrackList release={release} />
+          ) : (
+            <>
+              <div className="track-placeholder"><span className="track-index">01</span><div><strong>Track details coming soon</strong><p>The official tracklist hasn&apos;t been supplied yet.</p></div></div>
+              <div className="track-placeholder"><span className="track-index">02</span><div><strong>Playback activates with licensed audio</strong><p>Nothing plays here until the label publishes authorised files.</p></div></div>
+            </>
+          )}
           <div className="track-foot">
             <span>YOUR NEXT FAVORITE SOUND <em>starts here.</em></span>
-            <button className="open-player" id="openPlayer"><b>EXPLORE PLAYER</b> <span>↗</span></button>
+            <OpenPlayerButton />
           </div>
         </div>
       </div>
-      <div className="experience-bottom"><span>INDEPENDENT MUSIC. DISTINCTIVE VISION.</span><span>LEO &amp; ASSOCIATES / 2026</span></div>
     </section>
   );
 }
 
-export function Platforms() {
+export function Platforms({ release }: { release: Release | null }) {
+  const links = (release?.links ?? []).filter(l => isSafeExternalUrl(l.url));
+  const rows: { key: string; name: string; action: string; url: string | null }[] = links.length
+    ? links.map(l => ({ key: l.url, name: PLATFORM_LABEL[l.platform], action: l.platform === 'shopify' ? 'PURCHASE THE RELEASE' : 'STREAM THE RELEASE', url: l.url }))
+    : [
+        { key: 'apple', name: 'APPLE MUSIC', action: 'STREAM THE RELEASE', url: null },
+        { key: 'shopify', name: 'SHOPIFY', action: 'PURCHASE THE RELEASE', url: null },
+      ];
   return (
     <section className="platforms section-pad" id="platforms">
       <div className="section-heading" data-reveal>
-        <div className="section-id"><span className="small-cross">✳</span> 03 / FIND THE MUSIC</div>
+        <div className="section-id"><span className="small-cross" aria-hidden="true">✳</span> FIND THE MUSIC</div>
         <p>THE MUSIC GOES<br />WHERE YOU GO.</p>
       </div>
       <h2 className="split"><span className="line"><span>YOUR MUSIC.</span></span><span className="line"><em>YOUR WAY.</em></span></h2>
-      <div className="platform-grid">
-        <div className="platform" data-reveal><span className="platform-num">01</span><div><strong>APPLE MUSIC</strong><p>STREAM THE RELEASE</p></div><span className="platform-tag">LINK PENDING</span><span className="platform-arrow">↗</span></div>
-        <div className="platform" data-reveal><span className="platform-num">02</span><div><strong>SHOPIFY</strong><p>PURCHASE THE RELEASE</p></div><span className="platform-tag">LINK PENDING</span><span className="platform-arrow">↗</span></div>
-      </div>
-      <p className="link-notice">Official destination URLs will be connected when provided. No purchase links are fabricated.</p>
+      <ul className="platform-grid">
+        {rows.map((r, i) => (
+          <li key={r.key} data-reveal>
+            {r.url ? (
+              <a className="platform" href={r.url} target="_blank" rel="noopener noreferrer">
+                <span className="platform-num">{String(i + 1).padStart(2, '0')}</span>
+                <div><strong>{r.name.toUpperCase()}</strong><p>{r.action}</p></div>
+                <span className="platform-tag">OPENS {r.name.toUpperCase()}</span>
+                <span className="platform-arrow" aria-hidden="true">↗</span>
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : (
+              <div className="platform platform-pending">
+                <span className="platform-num">{String(i + 1).padStart(2, '0')}</span>
+                <div><strong>{r.name}</strong><p>{r.action}</p></div>
+                <span className="platform-tag">LINK PENDING</span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p className="link-notice">
+        {links.length ? 'Links open the official destination in a new tab. Purchases happen on the store, not on this site.' : 'Official destination links appear once verified. No purchase links are fabricated.'}
+      </p>
     </section>
   );
 }
 
-export function About() {
+export function AboutTeaser() {
   return (
     <section className="about section-pad" id="about">
-      <div className="about-top"><span>04 / THE LABEL</span><span>MORE THAN A NAME.</span></div>
+      <div className="about-top"><span>THE LABEL</span><span>MORE THAN A NAME.</span></div>
       <div className="about-main">
         <h2 className="split"><span className="line"><span>BUILT</span></span><span className="line"><span>AROUND</span></span><span className="line"><em>THE MUSIC.</em></span></h2>
         <div className="about-aside" data-reveal>
@@ -158,23 +213,25 @@ export function About() {
             </svg>
             <span>L<b>&amp;</b>A</span>
           </div>
-          <p>Leo &amp; Associates is an independent music label. This space will tell the label&apos;s story in its own words once the founder&apos;s approved introduction is available.</p>
-          {/* No contact address has been supplied, so this is text, not a link. */}
-          <span className="about-link" aria-disabled="true">CONTACT DETAILS TO FOLLOW ↗</span>
+          <p>Leo &amp; Associates is an independent music label. The label&apos;s story, in its own words, is on the way.</p>
+          <Link href="/about" className="about-link">READ ABOUT THE LABEL <span aria-hidden="true">→</span></Link>
         </div>
       </div>
     </section>
   );
 }
 
-export function Connect() {
+export function Connect({ socials }: { socials: SocialLink[] }) {
   return (
     <section className="connect" id="connect">
-      <div className="connect-top"><span>THE NEXT CHAPTER STARTS HERE</span><span>05 / CONNECT</span></div>
+      <div className="connect-top"><span>THE NEXT CHAPTER STARTS HERE</span><span>CONNECT</span></div>
       <h2 className="split"><span className="line"><span>STAY IN</span></span><span className="line line-loop"><em>THE LOOP<span>.</span></em></span></h2>
       <div className="connect-bottom">
         <p>New music. New chapters.<br />Stay close to the sound.</p>
-        <div className="connect-links"><span>SOCIAL LINKS — COMING SOON</span><span>CONTACT EMAIL — TO BE CONFIRMED</span></div>
+        <div className="connect-links">
+          <SocialLinks links={socials} className="connect-social" empty={<span>SOCIAL LINKS — COMING SOON</span>} />
+          <Link href="/contact" className="connect-contact">GET IN TOUCH <span aria-hidden="true">→</span></Link>
+        </div>
       </div>
     </section>
   );

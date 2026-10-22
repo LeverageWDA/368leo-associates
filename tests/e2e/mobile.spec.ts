@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-for (const width of [320, 375, 414, 768]) {
-  test(`no horizontal overflow at ${width}px`, async ({ page }) => {
+for (const path of ['/', '/music', '/artists', '/shop', '/about', '/contact']) for (const width of [320, 390, 768, 1440]) {
+  test(`no horizontal overflow on ${path} at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
-    await page.goto('/');
+    await page.goto(path);
     await page.evaluate(() => document.fonts.ready);
     // Scroll through so scroll-linked layout states are exercised too.
     await page.evaluate(async () => {

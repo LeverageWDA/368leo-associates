@@ -12,8 +12,22 @@ npm install
 npm run dev
 ```
 
-Then visit http://localhost:3000. The admin area (`/admin`) stays locked (503)
-until Supabase and Clerk are configured; see `docs/setup.md`.
+Then visit http://localhost:3000. With no content published yet, pages show
+their empty states. The admin area (`/admin`) stays locked (503) until Supabase
+and Clerk are configured; see `docs/setup.md`.
+
+To try the player, the interactive turntable and the release pages with
+clearly labelled sample data and a synthesised test signal (not music):
+
+```bash
+ENABLE_DEV_FIXTURES=1 npm run dev
+```
+
+Then open http://localhost:3000/dev/turntable or http://localhost:3000/music.
+Fixtures never appear on a production deployment.
+
+Pages: `/`, `/music`, `/music/[slug]`, `/artists`, `/artists/[slug]`, `/shop`,
+`/about`, `/contact`. Plan and open decisions: `docs/multipage-plan.md`.
 
 The original static prototype is kept in `prototype/` for reference
 (`cd prototype && python3 -m http.server 3001`).

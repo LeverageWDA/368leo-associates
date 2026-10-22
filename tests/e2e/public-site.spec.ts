@@ -22,15 +22,18 @@ test('no request leaves the site origin on load', async ({ page, baseURL }) => {
   expect(foreign).toEqual([]);
 });
 
-test('no purchase or streaming links are fabricated', async ({ page }) => {
+test('no purchase, streaming or social links are fabricated', async ({ page }) => {
   await page.goto('/');
-  const external = await page.locator('a[href^="http"], a[href^="mailto:"]').count();
-  expect(external).toBe(0);
+  // The only outbound link is the agreed development credit.
+  const external = await page.locator('a[href^="http"], a[href^="mailto:"]').evaluateAll(as => as.map(a => (a as HTMLAnchorElement).href));
+  expect(external).toEqual(['https://builtbyleverage.com/']);
   await expect(page.locator('.platform-tag')).toHaveText(['LINK PENDING', 'LINK PENDING']);
 });
 
 test('missing audio fails gracefully: the player offers no fake playback', async ({ page }) => {
   await page.goto('/');
+  // No audio is published, so the homepage deck is inert and says so.
+  await expect(page.locator('main .tt-platter')).toHaveAttribute('aria-disabled', 'true');
   await page.locator('#openPlayer').click();
   const dialog = page.getByRole('dialog', { name: /the music/i });
   await expect(dialog).toBeVisible();
@@ -56,7 +59,7 @@ test('security headers are sent', async ({ request }) => {
 
 test('robots.txt keeps private areas out of search', async ({ request }) => {
   const body = await (await request.get('/robots.txt')).text();
-  for (const path of ['/admin', '/sign-in', '/preview', '/api']) expect(body).toContain(`Disallow: ${path}`);
+  for (const path of ['/admin', '/sign-in', '/preview', '/api', '/dev', '/dev-fixtures']) expect(body).toContain(`Disallow: ${path}`);
 });
 
 test('unknown routes return 404', async ({ request }) => {

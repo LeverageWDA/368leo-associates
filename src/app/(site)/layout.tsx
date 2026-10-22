@@ -1,16 +1,22 @@
 import type { Metadata, Viewport } from 'next';
-import { PlayerChrome } from '@/components/site/PlayerChrome';
+import { MiniPlayer } from '@/components/player/MiniPlayer';
+import { PlayerOverlay } from '@/components/player/PlayerOverlay';
+import { PlayerProvider } from '@/components/player/PlayerProvider';
+import { DevFixtureBanner } from '@/components/site/PageMarkers';
 import { SiteEffects } from '@/components/site/SiteEffects';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { SiteHeader } from '@/components/site/SiteHeader';
-import { publicSiteUrl } from '@/lib/site-url';
 import { fontVariables } from '@/lib/fonts';
+import { publicSiteUrl } from '@/lib/site-url';
+import { devFixturesEnabled, getSiteSettings } from '@/server/content/repository';
 import './site.css';
+import './experience.css';
+import './pages.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(publicSiteUrl()),
-  title: 'Leo & Associates — Independent Music Label',
-  description: 'Leo & Associates — independent music label. Explore the featured release.',
+  title: { default: 'Leo & Associates — Independent Music Label', template: '%s — Leo & Associates' },
+  description: 'Leo & Associates — independent music label. Explore the music, the artists and the label.',
   alternates: { canonical: '/' },
 };
 
@@ -23,19 +29,24 @@ export const viewport: Viewport = {
 // apply without a flash (the prototype did this at the top of script.js).
 const JS_FLAG = "document.documentElement.classList.add('js')";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
   return (
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
       </head>
       <body>
-        <div className="site-shell">
-          <SiteHeader />
-          {children}
-          <SiteFooter />
-          <PlayerChrome />
-        </div>
+        <PlayerProvider>
+          <div className="site-shell">
+            {devFixturesEnabled() && <DevFixtureBanner />}
+            <SiteHeader socials={settings.socials} />
+            {children}
+            <SiteFooter socials={settings.socials} />
+          </div>
+          <MiniPlayer />
+          <PlayerOverlay />
+        </PlayerProvider>
         <SiteEffects />
       </body>
     </html>

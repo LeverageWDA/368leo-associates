@@ -1,0 +1,316 @@
+/* ==========================================================================
+   Inner pages. Each page has its own composition; they share tokens, type
+   roles and a few primitives (.pg-kicker, .pg-empty, .pg-label, sleeves).
+   ========================================================================== */
+
+.pg { padding: 56px var(--gutter) 120px; min-height: 70vh; }
+.pg-kicker { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-text); }
+.pg-kicker-dark { color: var(--gold); }
+.pg-label { margin: 0 0 22px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.pg-empty { max-width: 860px; padding: 40px 0 0; }
+.pg-empty-line { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(38px, 5.4vw, 76px); line-height: 1; letter-spacing: -.02em; }
+.pg-empty-note { margin: 26px 0 0; max-width: 520px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+.pg-empty-dark .pg-empty-note { color: #b0aa9c; }
+
+/* ---------- sleeves (cover art or labelled placeholder) ---------- */
+.sleeve { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.sleeve-placeholder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 9%;
+  color: #fff;
+  background:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px) 0 0 / 12.5% 12.5%,
+    linear-gradient(135deg, #1a1916 0 38%, #6d5410 70%, #d4af37);
+  container-type: inline-size;
+  overflow: hidden;
+}
+.sleeve-top { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: max(10px, 4.2cqw); letter-spacing: .1em; text-transform: uppercase; }
+.sleeve-top span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sleeve-mono { font-family: var(--display); font-weight: 700; font-size: 34cqw; letter-spacing: -.08em; line-height: .8; }
+.sleeve-mono b { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--bright); letter-spacing: 0; }
+.sleeve-bottom { font-family: var(--mono); font-size: max(10px, 4cqw); letter-spacing: .1em; text-transform: uppercase; color: #e9dfbf; }
+.sleeve-sm .sleeve-top, .sleeve-sm .sleeve-bottom { display: none; }
+.sleeve-sm { padding: 0; justify-content: center; align-items: center; }
+.sleeve-sm .sleeve-mono { font-size: 30cqw; }
+
+/* ==========================================================================
+   /music — the catalogue as an index of rows
+   ========================================================================== */
+.music-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 24px;
+}
+.music-head .pg-kicker { grid-column: 1 / -1; }
+.music-word {
+  margin: 10px 0 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(110px, 24vw, 400px);
+  letter-spacing: -.07em;
+  line-height: .78;
+}
+.music-word em { font-family: var(--serif); font-weight: 400; color: var(--gold-deep); letter-spacing: -.03em; }
+.music-count { margin: 0 0 1.2vw; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-align: right; }
+.pg-music .pg-empty { padding-top: 70px; }
+
+.cat-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 34px 0 10px; }
+.cat-filter button {
+  border: 1px solid var(--ink);
+  background: transparent;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 99px;
+  transition: background .3s, color .3s;
+}
+.cat-filter button span { font-family: var(--mono); font-weight: 500; margin-left: 8px; opacity: .6; }
+.cat-filter button[aria-pressed='true'] { background: var(--ink); color: var(--white); }
+.cat-list { list-style: none; padding: 0; margin: 20px 0 0; }
+.cat-row {
+  display: grid;
+  grid-template-columns: 52px 92px minmax(0, 2.4fr) minmax(0, 1fr) 140px 40px;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  isolation: isolate;
+}
+.cat-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(var(--gutter) * -1);
+  z-index: -1;
+  background: var(--paper);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform .5s var(--ease);
+}
+.cat-row:hover::before, .cat-row:focus-visible::before { transform: scaleY(1); }
+.cat-no { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.cat-sleeve { width: 92px; transition: transform .6s var(--ease); }
+.cat-row:hover .cat-sleeve { transform: rotate(-4deg) scale(1.06); }
+.cat-title { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 3.6vw, 56px); letter-spacing: -.05em; line-height: .95; }
+.cat-artist { font-size: 15px; }
+.cat-meta { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.cat-arrow { font-size: 26px; text-align: right; transition: transform .5s var(--ease); }
+.cat-row:hover .cat-arrow { transform: translateX(6px); }
+
+/* ==========================================================================
+   /music/[slug] — dark listening page, deck on the left
+   ========================================================================== */
+.pg-release { background: var(--night); color: #fff; padding-top: 34px; position: relative; overflow: hidden; }
+.pg-release::before {
+  content: '';
+  position: absolute;
+  width: 70vw; aspect-ratio: 1;
+  left: -20vw; top: -10vw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(212, 175, 55, .2), transparent);
+  pointer-events: none;
+}
+.rel-crumbs { position: relative; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #9c978b; }
+.rel-crumbs a { color: #fff; border-bottom: 1px solid #55524b; }
+.rel-crumbs-light { color: var(--muted); }
+.rel-crumbs-light a { color: var(--ink); border-color: var(--line); }
+.rel-grid { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 6vw; margin-top: 40px; align-items: start; }
+.rel-stage { position: sticky; top: calc(var(--nav-h) + 30px); }
+.rel-deck { width: 88%; max-width: 520px; margin-left: auto; }
+.rel-sleeve { position: absolute; left: 0; bottom: 3%; width: 34%; z-index: 2; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .8); transform: rotate(-5deg); }
+.rel-stage .tt-hint { position: static; margin-top: 30px; padding-left: 40%; text-align: left; line-height: 1.6; }
+.rel-noaudio { margin: 28px 0 0; font-size: 13px; line-height: 1.5; color: #b0aa9c; max-width: 420px; }
+.rel-title { margin: 14px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(54px, 7vw, 120px); letter-spacing: -.06em; line-height: .88; overflow-wrap: anywhere; }
+.rel-artist { margin: 18px 0 0; font-family: var(--serif); font-style: italic; font-size: clamp(26px, 2.6vw, 38px); }
+.rel-artist a { color: var(--gold); border-bottom: 1px solid rgba(212, 175, 55, .4); }
+.rel-desc { margin: 26px 0 0; max-width: 560px; font-size: 17px; line-height: 1.65; color: #cfc9ba; }
+.rel-actions { margin-top: 32px; display: flex; gap: 12px; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold::before { background: var(--bright); }
+.rel-block { margin-top: 56px; }
+.rel-h { margin: 0 0 18px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.rel-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.rel-dl { margin: 0; border-top: 1px solid #34332f; }
+.rel-dl div { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid #34332f; font-size: 14px; }
+.rel-dl dt { color: #9c978b; }
+.rel-dl dd { margin: 0; text-align: right; }
+
+/* ==========================================================================
+   /artists — the roster as giant type on black
+   ========================================================================== */
+.pg-artists { background: var(--ink); color: #fff; }
+.roster-head { border-bottom: 1px solid #3a3934; padding-bottom: 30px; }
+.roster-word { margin: 12px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(90px, 19vw, 320px); letter-spacing: -.07em; line-height: .78; }
+.roster-word span { color: var(--gold); }
+.roster-list { list-style: none; margin: 0; padding: 0; }
+.roster-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: baseline;
+  gap: 20px;
+  padding: 26px 0;
+  border-bottom: 1px solid #3a3934;
+  transition: color .4s;
+}
+.roster-no { font-family: var(--mono); font-size: 12px; color: #8f8b82; }
+.roster-name { font-family: var(--display); font-weight: 700; font-size: clamp(44px, 8vw, 132px); letter-spacing: -.06em; line-height: .9; transition: transform .6s var(--ease); }
+.roster-row:hover .roster-name { transform: translateX(2vw); color: var(--bright); }
+.roster-meta { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #b0aa9c; }
+
+/* ==========================================================================
+   /artists/[slug] — profile
+   ========================================================================== */
+.artist-head { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 4vw; align-items: end; margin-top: 30px; border-bottom: 1px solid var(--ink); padding-bottom: 40px; }
+.artist-name { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(64px, 10vw, 180px); letter-spacing: -.065em; line-height: .84; overflow-wrap: anywhere; }
+.artist-portrait img, .artist-portrait-empty { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.artist-portrait-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: radial-gradient(circle at 30% 20%, #ffe58a, var(--gold) 40%, #7a5d12 100%);
+  container-type: inline-size;
+}
+.artist-portrait-empty span { font-family: var(--display); font-weight: 700; font-size: 28cqw; letter-spacing: -.08em; line-height: 1; }
+.artist-portrait-empty b { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.artist-portrait-empty small { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.artist-body { display: grid; grid-template-columns: 2fr 1fr; gap: 6vw; margin-top: 56px; }
+.artist-bio p { margin: 0; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.6; max-width: 680px; }
+.artist-social { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.artist-social a, .contact-social-list a { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -.03em; border-bottom: 1px solid var(--gold); }
+.artist-social a span, .contact-social-list a span { font-family: var(--body); font-weight: 400; font-size: 15px; color: var(--muted); letter-spacing: 0; }
+.artist-releases { margin-top: 80px; }
+.sleeve-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 34px 2vw; }
+.sleeve-card { display: block; }
+.sleeve-card .sleeve { transition: transform .6s var(--ease), box-shadow .6s var(--ease); }
+.sleeve-card:hover .sleeve { transform: translateY(-6px); box-shadow: 0 24px 40px -18px rgba(0, 0, 0, .5); }
+.sleeve-card-title { display: block; margin-top: 16px; font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -.04em; }
+.sleeve-card-meta { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* ==========================================================================
+   /shop — two lanes, external checkout
+   ========================================================================== */
+.shop-head { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 4vw; align-items: end; padding-bottom: 40px; border-bottom: 1px solid var(--ink); }
+.shop-word { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(110px, 22vw, 360px); letter-spacing: -.07em; line-height: .78; }
+.shop-word em { font-family: var(--serif); font-weight: 400; color: var(--gold-deep); }
+.shop-intro { margin: 0 0 1vw; font-size: 17px; line-height: 1.6; max-width: 440px; }
+.shop-lanes { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2vw; margin-top: 50px; }
+.shop-lane { background: var(--paper); padding: 34px; min-height: 340px; display: flex; flex-direction: column; }
+.shop-lane-merch { background: var(--ink); color: #fff; }
+.shop-lane-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid currentColor; padding-bottom: 18px; }
+.shop-lane-head h2 { margin: 0; font-family: var(--display); font-size: clamp(36px, 4vw, 64px); letter-spacing: -.05em; line-height: 1; }
+.shop-lane-head span { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.shop-empty { margin: auto 0 0; padding-top: 40px; font-family: var(--serif); font-style: italic; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.2; max-width: 460px; }
+.shop-items { list-style: none; margin: 10px 0 0; padding: 0; }
+.shop-item { display: grid; grid-template-columns: 76px 1fr auto; gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.shop-item-title { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -.04em; }
+.shop-item-meta { display: block; margin-top: 4px; font-size: 13px; color: var(--muted); }
+.shop-item-buy { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+.shop-foot { margin-top: 40px; display: grid; gap: 14px; max-width: 520px; }
+.shop-fineprint { margin: 0; font-size: 12px; color: var(--muted); }
+
+/* ==========================================================================
+   /about — editorial chapters
+   ========================================================================== */
+.pg-about { background: var(--paper); }
+.about-hero { padding: 30px 0 70px; border-bottom: 1px solid var(--ink); }
+.about-statement { margin: 18px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(60px, 10vw, 170px); letter-spacing: -.065em; line-height: .86; max-width: 12ch; }
+.about-statement em { display: block; font-family: var(--serif); font-weight: 400; letter-spacing: -.02em; color: var(--gold-deep); }
+.about-chapters { margin-top: 20px; }
+.about-chapter { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 6vw; padding: 56px 0; border-bottom: 1px solid var(--line); }
+.about-chapter h2 { margin: 0; font-family: var(--display); font-size: clamp(30px, 3.2vw, 48px); letter-spacing: -.045em; line-height: 1; }
+.about-chapter h2 span { display: block; font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold-text); font-size: .7em; margin-bottom: 10px; }
+.about-chapter > div { display: grid; gap: 22px; max-width: 640px; }
+.about-lede { margin: 0; font-size: clamp(22px, 2vw, 28px); line-height: 1.4; }
+.about-next { display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; margin-top: 70px; }
+.about-next-link { display: flex; justify-content: space-between; align-items: center; padding: 30px; background: var(--ink); color: #fff; font-family: var(--display); font-weight: 700; font-size: clamp(24px, 2.6vw, 40px); letter-spacing: -.04em; transition: background .4s; }
+.about-next-link:nth-child(2) { background: var(--gold); color: var(--ink); }
+.about-next-link:hover { background: var(--gold-deep); color: #fff; }
+
+/* ==========================================================================
+   /contact — gold poster with enquiry routes
+   ========================================================================== */
+.pg-contact { background: var(--gold); }
+.contact-head { padding-bottom: 40px; border-bottom: 1px solid var(--ink); }
+.contact-head .pg-kicker { color: var(--ink); }
+.contact-word { margin: 14px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(90px, 17vw, 290px); letter-spacing: -.07em; line-height: .8; }
+.contact-word em { font-family: var(--serif); font-weight: 400; letter-spacing: -.02em; }
+.contact-routes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border-left: 1px solid var(--ink); }
+.contact-route { padding: 34px 28px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; flex-direction: column; gap: 12px; min-height: 230px; }
+.contact-route h2 { margin: 0; font-family: var(--display); font-size: 34px; letter-spacing: -.05em; }
+.contact-route p { margin: 0; font-size: 15px; line-height: 1.5; }
+.contact-email { margin-top: auto; font-weight: 700; border-bottom: 1px solid var(--ink); width: fit-content; overflow-wrap: anywhere; }
+.contact-pending { margin-top: auto; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.contact-social { margin-top: 60px; }
+.contact-social .pg-label { color: var(--ink); }
+.contact-social-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 30px; }
+.contact-social-list a { border-color: var(--ink); }
+.pg-contact .muted-light { color: var(--ink); }
+
+/* ==========================================================================
+   /dev/turntable — prototype lab
+   ========================================================================== */
+.pg-lab { background: var(--night); color: #fff; }
+.lab-head h1 { margin: 10px 0 0; font-family: var(--display); font-size: clamp(48px, 7vw, 110px); letter-spacing: -.06em; line-height: .9; }
+.lab-head p:last-child { max-width: 680px; font-size: 16px; line-height: 1.6; color: #cfc9ba; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; margin-top: 50px; align-items: start; }
+.lab-deck { max-width: 560px; padding-bottom: 110px; }
+.lab-side { display: grid; gap: 40px; justify-items: start; }
+.lab-notes { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; font-size: 14px; line-height: 1.5; color: #cfc9ba; }
+.lab-notes b { color: var(--gold); font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-right: 8px; }
+
+/* ==========================================================================
+   Tablet
+   ========================================================================== */
+@media (max-width: 1000px) {
+  .cat-row { grid-template-columns: 40px 76px minmax(0, 1fr) 110px 28px; }
+  .cat-artist { display: none; }
+  .cat-sleeve { width: 76px; }
+  .rel-grid { grid-template-columns: 1fr; }
+  .rel-stage { position: relative; top: 0; max-width: 560px; margin: 0 auto; width: 100%; }
+  .artist-body { grid-template-columns: 1fr; gap: 40px; }
+  .shop-head { grid-template-columns: 1fr; }
+  .shop-lanes { grid-template-columns: 1fr; }
+  .about-chapter { grid-template-columns: 1fr; gap: 20px; }
+  .lab-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+@media (max-width: 700px) {
+  .pg { padding: 34px 20px 90px; }
+  .music-head { grid-template-columns: 1fr; }
+  .music-count { text-align: left; margin-top: 16px; }
+  .cat-row { grid-template-columns: 64px minmax(0, 1fr) 20px; gap: 14px; padding: 16px 0; }
+  .cat-no { display: none; }
+  .cat-sleeve { width: 64px; grid-row: 1 / 3; }
+  .cat-title { font-size: 26px; grid-column: 2; }
+  .cat-meta { grid-column: 2; grid-row: 2; }
+  .cat-arrow { grid-column: 3; grid-row: 1 / 3; }
+  .rel-split { grid-template-columns: 1fr; gap: 0; }
+  .rel-title { font-size: clamp(46px, 14vw, 72px); }
+  .rel-actions .btn { width: 100%; }
+  .roster-row { grid-template-columns: 1fr; gap: 6px; }
+  .roster-no { display: none; }
+  .artist-head { grid-template-columns: 1fr; }
+  .artist-portrait { max-width: 260px; }
+  .shop-lane { padding: 24px 20px; min-height: 260px; }
+  .shop-item { grid-template-columns: 56px 1fr; }
+  .shop-item-buy { grid-column: 1 / -1; justify-self: start; }
+  .about-next { grid-template-columns: 1fr; gap: 10px; }
+  .about-next-link { padding: 22px 20px; }
+  .contact-route { min-height: 0; padding: 26px 20px; }
+  .sleeve-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 14px; }
+  .sleeve-card-title { font-size: 17px; }
+}
+
+@media (hover: none) {
+  .cat-row:hover::before { transform: scaleY(0); }
+  .roster-row:hover .roster-name { transform: none; color: inherit; }
+}
