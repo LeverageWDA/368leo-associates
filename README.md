@@ -33,4 +33,4 @@ Then visit http://localhost:3000.
 3. Verified Apple Music and Shopify URLs (platform rows are deliberately not links yet).
 4. The founder-approved label introduction and contact details.
 
-Fonts load from Google Fonts; system fallbacks are provided.
+Fonts are self-hosted in `fonts/` (no internet needed); system fallbacks are provided.
