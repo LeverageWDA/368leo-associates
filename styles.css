@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Leo & Associates — homepage
+   368 Leoz Entertainment — homepage
    Gold / black / light. Editorial display type, serif italic accents,
    mono metadata. Motion respects prefers-reduced-motion.
    ========================================================================== */
@@ -1001,3 +1001,97 @@ body.nav-hidden:not(.menu-open) .nav { transform: translateY(-101%); }
   .release-disc { transform: translateX(28%); }
   .marquee-track { animation: none; }
 }
+
+/* ==========================================================================
+   368 LEOZ ENTERTAINMENT — brand + player
+   ========================================================================== */
+img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
+
+/* Header crest + name */
+.brand { gap: 12px; }
+.brand-crest { height: 46px; width: auto; display: block; transition: transform .6s var(--ease); }
+.brand:hover .brand-crest { transform: scale(1.06) rotate(-2deg); }
+.brand-name { font-size: 17px; letter-spacing: -.01em; line-height: 1; }
+.brand-name small { color: var(--gold-text); letter-spacing: .32em; font-size: 8.5px; margin-top: 5px; }
+
+/* Crest on record labels */
+.disc-label { background: radial-gradient(circle at 34% 28%, #262219, #111110 70%); }
+.disc-label .label-crest { width: 74%; height: auto; display: block; margin-top: -4%; }
+.disc-label::after { background: var(--gold); box-shadow: 0 0 0 2px rgba(0,0,0,.6); width: 5%; top: 56%; }
+.spin .disc-label .label-crest { animation: none; }
+
+/* Release sleeve: logo until official cover art is added */
+.art-logo { position: absolute; z-index: 2; left: 50%; top: 50%; width: 68%; height: auto; transform: translate(-50%, -52%); filter: drop-shadow(0 18px 30px rgba(0,0,0,.55)); }
+.release-art.has-cover { background: var(--cover) center / cover no-repeat, var(--ink); }
+.release-art.has-cover .art-logo, .release-art.has-cover .art-grid, .release-art.has-cover .art-top, .release-art.has-cover .art-bottom { display: none; }
+
+/* Listening room cover */
+.player-cover-circle { background: radial-gradient(circle at 34% 28%, #2b261b 0, #151411 62%, #0b0b0a 100%); box-shadow: inset 0 0 0 1px rgba(212,175,55,.35), inset -24px -34px 70px rgba(0,0,0,.55); overflow: hidden; }
+.cover-img { width: 74%; height: auto; display: block; }
+.cover-img.is-cover { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+/* Tracklist */
+.track-list { list-style: none; margin: 0; padding: 0; }
+.track-row { border-top: 1px solid #34332f; }
+.track-row:last-child { border-bottom: 1px solid #34332f; }
+.track-row.is-empty, .track-btn { display: flex; align-items: center; gap: 20px; padding: 24px 0; width: 100%; transition: padding .5s var(--ease), background .3s; }
+.track-btn { background: none; border: 0; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+.track-btn:hover, .track-btn:focus-visible { padding-left: 14px; background: rgba(255,255,255,.035); }
+.track-row .track-index { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: .08em; }
+.track-row div { flex: 1; min-width: 0; }
+.track-row strong { display: block; font-family: var(--display); font-size: 21px; font-weight: 600; letter-spacing: -.03em; }
+.track-row p { font-size: 13px; color: #a9a59b; line-height: 1.5; margin: 6px 0 0; }
+.track-row .track-symbol { color: var(--bright); font-size: 15px; width: 26px; text-align: center; }
+.track-row.is-current strong { color: var(--bright); }
+
+/* Music video */
+.watch { background: var(--night); color: #fff; }
+.watch .section-heading p, .watch .section-id { color: #d3c9a6; }
+.watch h2 { font-family: var(--display); font-weight: 700; font-size: clamp(56px, 10vw, 170px); letter-spacing: -.065em; line-height: .86; margin: 40px 0 50px; }
+.watch h2 em { font-family: var(--serif); font-weight: 400; color: var(--gold); letter-spacing: -.02em; }
+.video-frame { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid #2f2d28; overflow: hidden; box-shadow: 0 40px 90px -40px rgba(212,175,55,.35); }
+.video-frame video, .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.video-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; background: radial-gradient(70% 70% at 50% 40%, #241e10, #0a0a09 75%); }
+.video-empty img { width: min(260px, 40%); height: auto; }
+.video-empty span { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: #d3c9a6; text-align: center; padding: 0 16px; }
+.watch .link-notice { color: #a9a59b; }
+
+/* About seal */
+.about-crest { position: absolute; left: 50%; top: 50%; width: 52%; height: auto; transform: translate(-50%, -50%); }
+
+/* Footer logo */
+.footer-logo-row { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 10px 0 46px; }
+.footer-logo { width: min(260px, 60vw); height: auto; }
+.footer-tagline { margin: 0; font-family: var(--mono); font-size: 11px; letter-spacing: .32em; color: var(--muted); }
+.footer-brand span { color: var(--gold-deep); }
+
+/* Mini player */
+.mini-art { background: #111110; padding: 4px; overflow: hidden; }
+.mini-art img { width: 100%; height: 100%; object-fit: contain; }
+.mini-toggle { flex: none; width: 46px; height: 46px; border: 0; background: var(--gold); color: var(--ink); font-size: 15px; transition: background .3s; }
+.mini-toggle:hover { background: var(--bright); }
+
+/* Overlay player */
+.overlay-art { padding: 0; align-items: center; justify-content: center; overflow: hidden; }
+.overlay-art img { width: 82%; height: auto; }
+.overlay-art img.is-cover { width: 100%; height: 100%; object-fit: cover; }
+.overlay-center h2 em { display: inline-block; max-width: 18ch; }
+.transport { width: min(520px, 100%); margin-top: 18px; }
+.seek { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 11px; color: #bbb6ab; }
+.seek input { flex: 1; accent-color: var(--gold); height: 24px; cursor: pointer; }
+.transport-buttons { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 16px; }
+.transport-buttons button { width: 52px; height: 52px; border: 1px solid #55524b; background: transparent; color: #fff; font-size: 17px; transition: background .3s, color .3s, border-color .3s; }
+.transport-buttons button:hover { border-color: var(--gold); color: var(--bright); }
+.transport-buttons .play-main { width: 72px; height: 72px; border: 0; background: var(--gold); color: var(--ink); font-size: 22px; border-radius: 50%; }
+.transport-buttons .play-main:hover { background: var(--bright); color: var(--ink); }
+.stream-note { margin: 18px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: #8f8a7e; }
+
+@media (max-width: 700px) {
+  .brand-crest { height: 38px; }
+  .brand-name { font-size: 15px; }
+  .track-row.is-empty, .track-btn { gap: 14px; padding: 20px 0; }
+  .track-row strong { font-size: 18px; }
+  .watch h2 { margin: 28px 0 32px; }
+}
+.disc-label::after { display: none; }
+.release-art:not(.has-cover) { background: radial-gradient(70% 55% at 50% 45%, rgba(212,175,55,.22), transparent 70%), linear-gradient(150deg, #151411 10%, #0c0c0b 100%); }

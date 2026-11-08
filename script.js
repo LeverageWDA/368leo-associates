@@ -1,4 +1,4 @@
-/* Leo & Associates — interactions
+/* 368 Leoz Entertainment — interactions
    1. Mobile menu (unchanged behaviour)
    2. Player overlay + mini player (unchanged behaviour, focus fix)
    3. Choreography: line reveals, scroll-linked art, marquee velocity,
@@ -54,7 +54,7 @@ document.addEventListener('keydown', e => {
     else closeMenu();
   }
   if (e.key === 'Tab' && overlay.classList.contains('active')) {
-    const focusables = [...overlay.querySelectorAll('button:not([disabled]),a[href]')];
+    const focusables = [...overlay.querySelectorAll('button:not([disabled]),a[href],input')].filter(el => el.offsetParent !== null);
     const first = focusables[0], last = focusables[focusables.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }

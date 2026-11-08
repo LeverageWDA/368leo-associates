@@ -1,0 +1,12 @@
+{
+  "headers": [
+    {
+      "source": "/media/(.*)",
+      "headers": [
+        { "key": "Content-Disposition", "value": "inline" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Cache-Control", "value": "private, max-age=3600" }
+      ]
+    }
+  ]
+}

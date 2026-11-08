@@ -1,6 +1,6 @@
-# Leo & Associates — Frontend Concept
+# 368 Leoz Entertainment
 
-A custom, mobile-first music-label frontend. **Concept only:** no invented artists, release names, credits, audio, or working purchase URLs.
+Official website for 368 Leoz Entertainment. *Music is the voice.*
 
 ## Run locally
 
@@ -10,27 +10,47 @@ python3 -m http.server 3000
 
 Then visit http://localhost:3000.
 
-## Design system
+## Adding songs, cover art and the music video
 
-- **Color:** light `#f7f6f2`, ink `#111110`, gold `#d4af37`, bright gold `#ffd700`. `--gold-deep` is for display-size gold on light, `--gold-text` for small gold text (AA).
-- **Type:** Space Grotesk (display), Instrument Serif italic (accents), DM Sans (body), DM Mono (metadata/labels).
-- **Objects:** a shared `.disc` record component (static grooves, spinning label) appears in the hero, the release sleeve and the player overlay.
+1. Copy the files into the `media` folder:
+   - `media/audio/`: songs (`.mp3` or `.m4a`)
+   - `media/covers/`: cover art (`.jpg` or `.png`, square works best)
+   - `media/video/`: the music video (`.mp4`). A YouTube link can be used instead.
+2. Open `catalog.js` and list them. File names must match exactly, including capital letters.
+3. Reload the page. The tracklist, player, release sleeve and video update automatically.
+   Anything left empty shows a "coming soon" state.
 
-## Motion & interaction
+Use web-sized files, not masters: about 128–192 kbps MP3 for audio and a 1080p MP4 under ~100 MB for video.
 
-- Masked line reveals on every display headline; fade-up on supporting blocks
-- Hero record parallax; release record slides out of its sleeve with scroll
-- Marquee speeds up with scroll velocity; nav auto-hides on scroll down, with a gold progress line
-- Listening room: ambient "nebula" glow that drifts and follows the pointer; breathing orb with orbit
-- Fill-wipe buttons, magnetic hero button, platform rows with gold sweep (labelled LINK PENDING)
-- Mini player parks itself while the footer is visible
-- All motion is disabled under `prefers-reduced-motion`
+## Listening without downloading
 
-## Placeholders still to replace
+Visitors can play music on the site, but the site offers no way to download it:
 
-1. Official EP cover art (`.release-art`) and tracklist.
-2. Licensed audio for the player overlay.
-3. Verified Apple Music and Shopify URLs (platform rows are deliberately not links yet).
-4. The founder-approved label introduction and contact details.
+- no download buttons and no links to the audio files
+- the audio plays through a hidden player with the browser's own controls turned off
+- the video player has its download, picture-in-picture and casting options turned off
+- right-click and drag-to-save are blocked on the players and artwork
+- `robots.txt` and the `vercel.json` headers keep `/media/` out of search engines
 
-Fonts are self-hosted in `fonts/` (no internet needed); system fallbacks are provided.
+**Limits:** these measures stop casual downloading only. Anything a browser can play can be
+captured by someone determined (for example by recording the sound, or using developer
+tools to find the file address). To protect masters, only upload web-quality versions, or use
+a short preview clip. For stronger protection, stream through a service with signed, expiring
+links (for example Mux or Cloudflare Stream) or embed from YouTube, SoundCloud or Audiomack.
+
+## Brand
+
+- Logo files are in `assets/brand/`:
+  - `368leoz-logo.png`: full logo for light backgrounds
+  - `368leoz-logo-on-dark.png`: brightened version for dark backgrounds
+  - `368leoz-crest.png` and `368leoz-crest-on-dark.png`: crest only
+  - `favicon.png` and `apple-touch-icon.png`: browser icons
+- Colours: light `#f7f6f2`, ink `#111110`, gold `#d4af37`, bright gold `#ffd700`.
+- Type: Space Grotesk (display), Instrument Serif italic (accents), DM Sans (body), DM Mono (labels).
+  Fonts are self-hosted in `fonts/`.
+
+## Still to supply
+
+1. Songs, cover art and the music video (see above).
+2. Apple Music and store links.
+3. The approved "About" text, social links and contact email.
