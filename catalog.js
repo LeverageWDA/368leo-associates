@@ -34,7 +34,7 @@ window.LEOZ_CATALOG = {
     { title: "Dreams", artist: "1OneDine", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/1onedine-dreams.mp3", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/1onedine-dreams.jpg" },
     { title: "Pressure and Pain", artist: "Koolas", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/koolas-pressure-and-pain.m4a", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/koolas-pressure-and-pain.jpg" },
     { title: "Tape 5", artist: "Koolaz", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/koolaz-tape-5.m4a", cover: "" },
-    { title: "Fresh Start", artist: "", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/fresh-start.m4a", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/fresh-start.jpg" },
+    { title: "Fresh Start", artist: "Shane O", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/fresh-start.m4a", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/fresh-start.jpg" },
     { title: "Chip", artist: "BiggsDon", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/biggsdon-chip.m4a", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/biggsdon-chip.jpg" },
     { title: "Heart Cry", artist: "Hy-Jah Flamez", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/hy-jah-flamez-heart-cry.mp3", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/hy-jah-flamez-heart-cry.jpg" },
     { title: "Gift Card", artist: "1OneDine", file: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/audio/1onedine-gift-card.mp3", cover: "https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/covers/1onedine-gift-card.jpg" },
