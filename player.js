@@ -15,7 +15,7 @@
   const tracks = (C.tracks || []).filter(t => t && t.file && t.title);
   const videos = (Array.isArray(C.videos) ? C.videos : [C.video]).filter(v => v && (v.file || v.youtube));
   const releaseCover = release.cover || '';
-  const artistOf = t => (t && t.artist) || LABEL;
+  const artistOf = t => (t && t.artist) || 'Artist to be confirmed';
   const $ = id => document.getElementById(id);
   const fmt = s => (!isFinite(s) || s < 0) ? '0:00' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
   const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

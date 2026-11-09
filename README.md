@@ -17,8 +17,9 @@ Then visit http://localhost:3000.
 | Home | `index.html` | Hero, featured release, listening room (first 6 tracks, "Show all"), video, links |
 | Music | `music.html` | Every track in a scrolling list |
 | Videos | `videos.html` | Music video(s) |
-| Artists | `artists.html` | One card per artist, built automatically from `catalog.js` |
-| About | `about.html` | The story, plus contact and socials |
+| Featured Artists | `artists.html` | One card per artist, built automatically from `catalog.js` |
+| About | `about.html` | The story, plus rights and credits |
+| Contact | `contact.html` | Email, Instagram, TikTok and a message form (opens the visitor's email app) |
 
 Moving between pages doesn't reload the site (`router.js`), so a song keeps playing.
 The header, footer and players are the same on every page: if you change them, change all five files.
@@ -55,6 +56,19 @@ captured by someone determined (for example by recording the sound, or using dev
 tools to find the file address). To protect masters, only upload web-quality versions, or use
 a short preview clip. For stronger protection, stream through a service with signed, expiring
 links (for example Mux or Cloudflare Stream) or embed from YouTube, SoundCloud or Audiomack.
+
+## Link previews and icons
+
+- `favicon.ico`, `assets/brand/icon-192.png`, `icon-512.png` and `apple-touch-icon.png` are the browser and phone icons.
+- `assets/brand/og-image.jpg` (1200×630) is the picture shown when the link is shared on WhatsApp, Instagram, Facebook, X and iMessage.
+  Share apps need a full web address for it, so the pages point to the copy in Cloudflare R2:
+  `https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/brand/og-image.jpg`. If you change the image, upload the new one to the same place.
+
+## Rights
+
+The riddims belong to 368 Leoz Entertainment. The artists are independent and only voiced on those riddims, so the site
+says so on the Featured Artists and About pages and in every footer. Keep written permission from each artist to stream
+their song on this site.
 
 ## Brand
 

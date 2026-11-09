@@ -17,7 +17,7 @@ window.LEOZ_CATALOG = {
   release: {
     title: "368 Leoz Entertainment Presents",
     artist: "Various Artists",
-    description: "A collection of music from the 368 Leoz Entertainment family. Press play and turn it up.",
+    description: "Songs voiced by independent artists on riddims produced and owned by 368 Leoz Entertainment. Press play and turn it up.",
     cover: ""
   },
 

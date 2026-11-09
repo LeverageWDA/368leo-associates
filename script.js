@@ -148,7 +148,7 @@ if (!reduceMotion) {
 
 /* ---------- 6. Nav: mark the current page ---------- */
 function pageName(path) {
-  const m = path.match(/\/(music|videos|artists|about)(\.html)?\/?$/);
+  const m = path.match(/\/(music|videos|artists|about|contact)(\.html)?\/?$/);
   return m ? m[1] : 'home';
 }
 function markNav() {
@@ -211,6 +211,17 @@ function initPage(root) {
         glow.style.setProperty('--ny', ((e.clientY - r.top) / r.height - .55) * 50 + 'vh');
       });
     }
+  }
+
+  const form = root.querySelector('#contactForm');
+  if (form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const subject = `${d.get('topic')}: message from ${d.get('name')}`;
+      const body = `${d.get('message')}\n\n${d.get('name')}`;
+      location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
   }
 
   lastY = window.scrollY;

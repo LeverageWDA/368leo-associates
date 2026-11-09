@@ -7,7 +7,7 @@
 (function () {
   if (!window.fetch || !window.history?.pushState || !window.DOMParser) return;
 
-  const PAGE = /^\/(?:(?:index|music|videos|artists|about)(?:\.html)?)?$/;
+  const PAGE = /^\/(?:(?:index|music|videos|artists|about|contact)(?:\.html)?)?$/;
   let busy = false;
   const norm = p => p.replace(/(index)?(\.html)?$/, '').replace(/\/$/, '');
   let currentPage = norm(location.pathname);

@@ -6,13 +6,24 @@
 <meta name="theme-color" content="#0d0d0c" />
 <meta name="description" content="368 Leoz Entertainment. Music is the voice. Listen to the latest releases and watch the videos." />
 <title>368 Leoz Entertainment | Music Is the Voice</title>
-<link rel="icon" type="image/png" href="assets/brand/favicon.png" />
+<link rel="icon" href="favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/icon-192.png" />
 <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
-<meta property="og:title" content="368 Leoz Entertainment" />
-<meta property="og:description" content="Music is the voice." />
-<meta property="og:image" content="assets/brand/368leoz-logo.png" />
-<link rel="stylesheet" href="fonts/fonts.css?v=20261109b" />
-<link rel="stylesheet" href="styles.css?v=20261109b" />
+<link rel="manifest" href="site.webmanifest" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="368 Leoz Entertainment" />
+<meta property="og:title" content="368 Leoz Entertainment | Music Is the Voice" />
+<meta property="og:description" content="368 Leoz Entertainment. Music is the voice. Listen to the latest releases and watch the videos." />
+<meta property="og:image" content="https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/brand/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="368 Leoz Entertainment crest. Music is the voice." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="368 Leoz Entertainment | Music Is the Voice" />
+<meta name="twitter:description" content="368 Leoz Entertainment. Music is the voice. Listen to the latest releases and watch the videos." />
+<meta name="twitter:image" content="https://pub-e6ebba16f5a8490e8e3bc21eb67db275.r2.dev/brand/og-image.jpg" />
+<link rel="stylesheet" href="fonts/fonts.css?v=20261109c" />
+<link rel="stylesheet" href="styles.css?v=20261109c" />
 </head>
 <body>
 <div class="site-shell">
@@ -27,9 +38,10 @@
     <a href="videos.html" data-page="videos"><span class="nav-num">02</span>VIDEOS</a>
     <a href="artists.html" data-page="artists"><span class="nav-num">03</span>ARTISTS</a>
     <a href="about.html" data-page="about"><span class="nav-num">04</span>ABOUT</a>
+    <a href="contact.html" data-page="contact"><span class="nav-num">05</span>CONTACT</a>
   </nav>
   <div class="nav-right">
-    <a href="about.html#connect" class="nav-contact">LET'S CONNECT <span aria-hidden="true">↗</span></a>
+    <a href="contact.html" class="nav-contact">LET'S CONNECT <span aria-hidden="true">↗</span></a>
     <button id="menuToggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
   </div>
   <span class="nav-progress" aria-hidden="true"></span>
@@ -42,6 +54,7 @@
   <a href="videos.html" data-page="videos">Videos <span>02</span></a>
   <a href="artists.html" data-page="artists">Artists <span>03</span></a>
   <a href="about.html" data-page="about">About <span>04</span></a>
+  <a href="contact.html" data-page="contact">Contact <span>05</span></a>
   <p>368 LEOZ ENTERTAINMENT / MUSIC IS THE VOICE</p>
 </div>
 
@@ -183,7 +196,7 @@
 
 <!-- EXPLORE -->
 <section class="explore section-pad" aria-label="Explore 368 Leoz">
-  <a href="artists.html" class="explore-card" data-reveal><span>03 / ARTISTS</span><strong>MEET THE<br /><em>ARTISTS.</em></strong><i aria-hidden="true">↗</i></a>
+  <a href="artists.html" class="explore-card" data-reveal><span>03 / ARTISTS</span><strong>FEATURED<br /><em>ARTISTS.</em></strong><i aria-hidden="true">↗</i></a>
   <a href="about.html" class="explore-card" data-reveal><span>04 / ABOUT</span><strong>THE STORY OF<br /><em>368 LEOZ.</em></strong><i aria-hidden="true">↗</i></a>
 </section>
 
@@ -199,15 +212,25 @@
       <a href="videos.html">Videos</a>
       <a href="artists.html">Artists</a>
       <a href="about.html">About</a>
-      <a href="about.html#connect">Connect</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </div>
+  <div class="footer-social">
+    <a href="mailto:mazleo368@gmail.com">mazleo368@gmail.com</a>
+    <a href="https://www.instagram.com/368leoz_entertainment/" target="_blank" rel="noopener">Instagram ↗</a>
+    <a href="https://www.tiktok.com/@leoz_ent" target="_blank" rel="noopener">TikTok ↗</a>
+  </div>
+  <p class="footer-legal">Riddims and instrumentals © 368 Leoz Entertainment. Vocal performances, lyrics, artwork and artist names belong to their respective artists, who are independent and not signed to 368 Leoz Entertainment. Music is for listening on this site only: no downloading, copying or redistribution. Rights questions or removal requests: <a href="mailto:mazleo368@gmail.com">mazleo368@gmail.com</a>.</p>
   <div class="footer-row">
     <a href="index.html" class="footer-brand">368 <span>LEOZ</span> ENTERTAINMENT</a>
     <span>MUSIC IS THE VOICE</span>
     <a href="#top" class="footer-top">BACK TO TOP ↑</a>
     <span>© 2026 368 LEOZ ENTERTAINMENT</span>
   </div>
+  <a class="footer-credit" href="https://builtbyleverage.com/" target="_blank" rel="noopener">
+    <span>WEBSITE DEVELOPED BY</span>
+    <strong>Built by Leverage <i aria-hidden="true">↗</i></strong>
+  </a>
 </footer>
 
 <div class="mini-player" id="miniPlayer">
@@ -246,9 +269,9 @@
 </div>
 
 </div>
-<script src="catalog.js?v=20261109b"></script>
-<script src="player.js?v=20261109b"></script>
-<script src="script.js?v=20261109b"></script>
-<script src="router.js?v=20261109b"></script>
+<script src="catalog.js?v=20261109c"></script>
+<script src="player.js?v=20261109c"></script>
+<script src="script.js?v=20261109c"></script>
+<script src="router.js?v=20261109c"></script>
 </body>
 </html>

@@ -1250,3 +1250,59 @@ main h1:focus { outline: none; }
   .track-foot-actions { flex-direction: column; }
   .track-list.expanded, .track-list[data-scroll] { max-height: 62vh; }
 }
+
+/* ==========================================================================
+   CONTACT, RIGHTS, FOOTER CREDIT
+   ========================================================================== */
+.contact { background: var(--night); color: #fff; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.contact-cards { display: grid; gap: 14px; }
+.contact-card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 24px 26px; border: 1px solid #2f2d28; background: linear-gradient(160deg, #191814, #111110); transition: border-color .3s, background .3s; }
+a.contact-card:hover { border-color: var(--gold); background: #1d1b16; }
+.contact-card span { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--gold); }
+.contact-card strong { font-family: var(--display); font-size: clamp(20px, 2.2vw, 30px); letter-spacing: -.03em; overflow-wrap: anywhere; }
+.contact-card i { position: absolute; top: 22px; right: 24px; font-style: normal; font-size: 20px; color: var(--bright); transition: transform .4s var(--ease); }
+a.contact-card:hover i { transform: rotate(45deg); }
+.contact-card-main { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.contact-card-main span, .contact-card-main i { color: var(--ink); }
+a.contact-card-main:hover { background: var(--bright); border-color: var(--bright); }
+.contact-form { display: grid; gap: 18px; padding: 30px; background: var(--white); color: var(--ink); }
+.contact-form h2 { margin: 0 0 6px; font-family: var(--display); font-size: 34px; letter-spacing: -.04em; }
+.contact-form label { display: grid; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.contact-form input, .contact-form select, .contact-form textarea { font: 16px var(--body); color: var(--ink); background: #fff; border: 1px solid #cfcabd; padding: 14px; border-radius: 0; text-transform: none; letter-spacing: 0; }
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { outline: 2px solid var(--gold); outline-offset: 0; border-color: var(--gold); }
+.contact-form textarea { resize: vertical; min-height: 140px; }
+.contact-form .btn { justify-content: space-between; border: 0; cursor: pointer; }
+.form-note { margin: 0; font-size: 13px; color: var(--muted); }
+
+.rights { background: var(--white); }
+.rights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #d7d3c8; border: 1px solid #d7d3c8; margin-top: 40px; }
+.rights-grid > div { background: var(--white); padding: 28px; }
+.rights-grid h3 { margin: 0 0 10px; font-family: var(--display); font-size: 22px; letter-spacing: -.03em; }
+.rights-grid p { margin: 0; line-height: 1.6; color: #4b4943; }
+.rights-grid a { color: var(--gold-text); text-decoration: underline; text-underline-offset: 3px; }
+.artists-note { max-width: 760px; margin: -18px 0 36px; color: #a9a59b; font-size: 14px; line-height: 1.6; }
+.connect-links a { transition: color .3s; }
+.connect-links a:hover { color: var(--bright); }
+
+.footer-social { display: flex; flex-wrap: wrap; gap: 10px 28px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; margin-bottom: 18px; }
+.footer-social a { color: var(--ink); border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+.footer-social a:hover { color: var(--gold-text); }
+.footer-legal { max-width: 900px; margin: 0 0 26px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+.footer-legal a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.footer-credit {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-top: 26px; padding: 20px 24px; background: var(--ink); color: #fff;
+  transition: background .3s;
+}
+.footer-credit span { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: #bdb8ad; }
+.footer-credit strong { font-family: var(--display); font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -.03em; color: var(--bright); }
+.footer-credit strong i { font-style: normal; display: inline-block; transition: transform .4s var(--ease); }
+.footer-credit:hover { background: #1d1b16; }
+.footer-credit:hover strong i { transform: rotate(45deg); }
+
+@media (max-width: 860px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .rights-grid { grid-template-columns: 1fr; }
+  .contact-form { padding: 22px; }
+}
