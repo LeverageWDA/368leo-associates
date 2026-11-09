@@ -18,18 +18,18 @@
 <div class="site-shell">
 
 <header class="nav" id="top">
-  <a href="#top" class="brand" aria-label="368 Leoz Entertainment home">
+  <a href="index.html" class="brand" aria-label="368 Leoz Entertainment home">
     <img class="brand-crest" src="assets/brand/368leoz-crest.png" alt="" width="480" height="320" draggable="false" />
     <span class="brand-name">368 LEOZ<small>ENTERTAINMENT</small></span>
   </a>
   <nav class="desktop-nav" aria-label="Primary">
-    <a href="#release"><span class="nav-num">01</span>THE RELEASE</a>
-    <a href="#experience"><span class="nav-num">02</span>LISTEN</a>
-    <a href="#watch"><span class="nav-num">03</span>WATCH</a>
-    <a href="#about"><span class="nav-num">04</span>ABOUT</a>
+    <a href="music.html" data-page="music"><span class="nav-num">01</span>MUSIC</a>
+    <a href="videos.html" data-page="videos"><span class="nav-num">02</span>VIDEOS</a>
+    <a href="artists.html" data-page="artists"><span class="nav-num">03</span>ARTISTS</a>
+    <a href="about.html" data-page="about"><span class="nav-num">04</span>ABOUT</a>
   </nav>
   <div class="nav-right">
-    <a href="#connect" class="nav-contact">LET'S CONNECT <span aria-hidden="true">↗</span></a>
+    <a href="about.html#connect" class="nav-contact">LET'S CONNECT <span aria-hidden="true">↗</span></a>
     <button id="menuToggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
   </div>
   <span class="nav-progress" aria-hidden="true"></span>
@@ -37,15 +37,15 @@
 
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <div class="mobile-menu-head">368 LEOZ ENTERTAINMENT <span>001—005</span></div>
-  <a href="#release">The release <span>01</span></a>
-  <a href="#experience">Listen <span>02</span></a>
-  <a href="#watch">Watch <span>03</span></a>
-  <a href="#about">About <span>04</span></a>
-  <a href="#connect">Connect <span>05</span></a>
+  <a href="index.html" data-page="home">Home <span>00</span></a>
+  <a href="music.html" data-page="music">Music <span>01</span></a>
+  <a href="videos.html" data-page="videos">Videos <span>02</span></a>
+  <a href="artists.html" data-page="artists">Artists <span>03</span></a>
+  <a href="about.html" data-page="about">About <span>04</span></a>
   <p>368 LEOZ ENTERTAINMENT / MUSIC IS THE VOICE</p>
 </div>
 
-<main>
+<main data-page="home">
 
 <!-- HERO -->
 <section class="hero" aria-labelledby="heroTitle">
@@ -95,7 +95,7 @@
         <div class="disc release-disc" aria-hidden="true">
           <div class="disc-label"><img class="label-crest" src="assets/brand/368leoz-crest.png" alt="" draggable="false" /></div>
         </div>
-        <div class="release-art" id="releaseArt" role="img" aria-label="368 Leoz Entertainment release artwork">
+        <div class="release-art" role="img" aria-label="368 Leoz Entertainment release artwork">
           <div class="art-grid" aria-hidden="true"></div>
           <div class="art-top"><span>368 LEOZ</span><span>ENTERTAINMENT</span></div>
           <img class="art-logo" src="assets/brand/368leoz-logo-on-dark.png" alt="" draggable="false" />
@@ -107,21 +107,20 @@
     <div class="release-content" data-reveal>
       <span class="eyebrow">THE FEATURED RELEASE / 001</span>
       <h2 class="split"><span class="line"><span>THE</span></span><span class="line"><em>RELEASE<span class="period">.</span></em></span></h2>
-      <p class="release-desc" id="releaseDesc">Explore the music, press play in the listening room and watch the official video.</p>
+      <p class="release-desc" data-release-desc>Explore the music, press play in the listening room and watch the official video.</p>
       <div class="release-meta">
-        <div><span>TITLE</span><strong id="releaseTitle">FEATURED RELEASE</strong></div>
-        <div><span>ARTIST</span><strong id="releaseArtist">368 LEOZ ENTERTAINMENT</strong></div>
-        <div><span>TRACKS</span><strong id="releaseCount">COMING SOON</strong></div>
+        <div><span>TITLE</span><strong data-release-title>FEATURED RELEASE</strong></div>
+        <div><span>ARTIST</span><strong data-release-artist>368 LEOZ ENTERTAINMENT</strong></div>
+        <div><span>TRACKS</span><strong data-release-count>COMING SOON</strong></div>
       </div>
       <div class="release-actions">
         <a href="#experience" class="btn btn-black"><b>LISTEN NOW</b> <span>↗</span></a>
-        <a href="#watch" class="btn btn-outline"><b>WATCH THE VIDEO</b> <span>↗</span></a>
+        <a href="videos.html" class="btn btn-outline"><b>WATCH THE VIDEO</b> <span>↗</span></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LISTENING ROOM -->
 <section class="experience" id="experience">
   <div class="nebula" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="experience-top"><span>02 / LISTENING ROOM</span><span>TURN THE VOLUME UP ↗</span></div>
@@ -134,43 +133,41 @@
     <p data-reveal>Stream every track right here.<br />Listening only, no downloads.</p>
   </div>
   <div class="player-layout">
-    <div class="player-cover" id="playerCover">
+    <div class="player-cover">
       <div class="orbit orbit-1" aria-hidden="true"></div>
       <div class="orbit orbit-2" aria-hidden="true"></div>
       <div class="orbit orbit-3" aria-hidden="true"><b></b></div>
-      <div class="player-cover-circle"><img class="cover-img" id="coverImg" src="assets/brand/368leoz-crest.png" alt="" draggable="false" /></div>
+      <div class="player-cover-circle"><img class="cover-img" data-cover src="assets/brand/368leoz-crest.png" alt="" draggable="false" /></div>
       <span class="player-cover-label">368 LEOZ / NOW PLAYING</span>
-      <span class="player-cover-status" id="coverStatus"><i></i>READY</span>
+      <span class="player-cover-status" data-cover-status><i></i>READY</span>
     </div>
     <div class="track-panel" data-reveal>
-      <div class="track-panel-top"><span>THE TRACKLIST</span><span id="trackCountLabel">STREAM ONLY</span></div>
-      <ol class="track-list" id="trackList" aria-label="Tracklist"></ol>
+      <div class="track-panel-top"><span>THE TRACKLIST</span><span data-track-count>STREAM ONLY</span></div>
+      <ol class="track-list" data-tracklist data-limit="6" aria-label="Tracklist"></ol>
       <div class="track-foot">
         <span>YOUR NEXT FAVORITE SOUND <em>starts here.</em></span>
-        <button class="open-player" id="openPlayer"><b>OPEN PLAYER</b> <span>↗</span></button>
+        <div class="track-foot-actions"><a href="music.html" class="room-link">FULL MUSIC PAGE <span aria-hidden="true">↗</span></a><button class="open-player" data-open-player><b>OPEN PLAYER</b> <span>↗</span></button></div>
       </div>
     </div>
   </div>
   <div class="experience-bottom"><span>MUSIC IS THE VOICE.</span><span>368 LEOZ ENTERTAINMENT / 2026</span></div>
 </section>
 
-<!-- WATCH -->
 <section class="watch section-pad" id="watch">
   <div class="section-heading" data-reveal>
     <div class="section-id"><span class="small-cross">✳</span> 03 / MUSIC VIDEO</div>
     <p>PRESS PLAY.<br />SEE THE STORY.</p>
   </div>
   <h2 class="split"><span class="line"><span>WATCH</span></span><span class="line"><em>THE VIDEO.</em></span></h2>
-  <div class="video-frame" id="videoFrame" data-reveal>
-    <div class="video-empty" id="videoEmpty">
+  <div class="video-frame" data-video="0" data-reveal>
+    <div class="video-empty">
       <img src="assets/brand/368leoz-logo-on-dark.png" alt="" draggable="false" />
       <span>OFFICIAL MUSIC VIDEO / COMING SOON</span>
     </div>
   </div>
-  <p class="link-notice" id="videoCaption"></p>
+  <p class="link-notice video-caption" data-video-caption></p>
 </section>
 
-<!-- PLATFORMS -->
 <section class="platforms section-pad" id="platforms">
   <div class="section-heading" data-reveal>
     <div class="section-id"><span class="small-cross">✳</span> FIND THE MUSIC</div>
@@ -184,49 +181,33 @@
   <p class="link-notice">Official store and streaming links will be connected when provided.</p>
 </section>
 
-<!-- ABOUT -->
-<section class="about section-pad" id="about">
-  <div class="about-top"><span>04 / ABOUT</span><span>MORE THAN A NAME.</span></div>
-  <div class="about-main">
-    <h2 class="split"><span class="line"><span>BUILT</span></span><span class="line"><span>AROUND</span></span><span class="line"><em>THE MUSIC.</em></span></h2>
-    <div class="about-aside" data-reveal>
-      <div class="about-symbol" aria-hidden="true">
-        <svg class="seal" viewBox="0 0 200 200">
-          <defs><path id="sealPath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
-          <text><textPath href="#sealPath" textLength="486" lengthAdjust="spacing">368 LEOZ ENTERTAINMENT · MUSIC IS THE VOICE · 368 ·</textPath></text>
-        </svg>
-        <img class="about-crest" src="assets/brand/368leoz-crest.png" alt="" draggable="false" />
-      </div>
-      <p>368 Leoz Entertainment is an independent music and entertainment company. Music is the voice. This space will tell the story in the founder's own words once the approved introduction is supplied.</p>
-      <a href="mailto:hello@example.com" class="about-link" aria-disabled="true" tabindex="-1">CONTACT DETAILS TO FOLLOW ↗</a>
-    </div>
-  </div>
-</section>
-
-<!-- CONNECT -->
-<section class="connect" id="connect">
-  <div class="connect-top"><span>THE NEXT CHAPTER STARTS HERE</span><span>05 / CONNECT</span></div>
-  <h2 class="split"><span class="line"><span>STAY IN</span></span><span class="line line-loop"><em>THE LOOP<span>.</span></em></span></h2>
-  <div class="connect-bottom">
-    <p>New music. New chapters.<br />Stay close to the sound.</p>
-    <div class="connect-links"><span>SOCIAL LINKS — COMING SOON</span><span>CONTACT EMAIL — TO BE CONFIRMED</span></div>
-  </div>
+<!-- EXPLORE -->
+<section class="explore section-pad" aria-label="Explore 368 Leoz">
+  <a href="artists.html" class="explore-card" data-reveal><span>03 / ARTISTS</span><strong>MEET THE<br /><em>ARTISTS.</em></strong><i aria-hidden="true">↗</i></a>
+  <a href="about.html" class="explore-card" data-reveal><span>04 / ABOUT</span><strong>THE STORY OF<br /><em>368 LEOZ.</em></strong><i aria-hidden="true">↗</i></a>
 </section>
 
 </main>
 
 <footer class="footer">
-  <div class="footer-logo-row">
-    <img class="footer-logo" src="assets/brand/368leoz-logo.png" alt="368 Leoz Entertainment" width="736" height="671" draggable="false" />
-    <p class="footer-tagline">MUSIC IS THE VOICE</p>
+  <div class="footer-main">
+    <a href="index.html" class="footer-logo-link" aria-label="368 Leoz Entertainment home">
+      <img class="footer-logo" src="assets/brand/368leoz-logo.png" alt="368 Leoz Entertainment" width="736" height="671" draggable="false" />
+    </a>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="music.html">Music</a>
+      <a href="videos.html">Videos</a>
+      <a href="artists.html">Artists</a>
+      <a href="about.html">About</a>
+      <a href="about.html#connect">Connect</a>
+    </nav>
   </div>
   <div class="footer-row">
-    <a href="#top" class="footer-brand">368 <span>LEOZ</span> ENTERTAINMENT</a>
+    <a href="index.html" class="footer-brand">368 <span>LEOZ</span> ENTERTAINMENT</a>
     <span>MUSIC IS THE VOICE</span>
     <a href="#top" class="footer-top">BACK TO TOP ↑</a>
     <span>© 2026 368 LEOZ ENTERTAINMENT</span>
   </div>
-  <div class="footer-wordmark" aria-hidden="true">368<em>LEOZ</em></div>
 </footer>
 
 <div class="mini-player" id="miniPlayer">
@@ -268,5 +249,6 @@
 <script src="./catalog.js"></script>
 <script src="./player.js"></script>
 <script src="./script.js"></script>
+<script src="./router.js"></script>
 </body>
 </html>

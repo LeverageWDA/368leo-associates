@@ -10,12 +10,26 @@ python3 -m http.server 3000
 
 Then visit http://localhost:3000.
 
+## Pages
+
+| Page | File | What's on it |
+|---|---|---|
+| Home | `index.html` | Hero, featured release, listening room (first 6 tracks, "Show all"), video, links |
+| Music | `music.html` | Every track in a scrolling list |
+| Videos | `videos.html` | Music video(s) |
+| Artists | `artists.html` | One card per artist, built automatically from `catalog.js` |
+| About | `about.html` | The story, plus contact and socials |
+
+Moving between pages doesn't reload the site (`router.js`), so a song keeps playing.
+The header, footer and players are the same on every page: if you change them, change all five files.
+
 ## Adding songs, cover art and the music video
 
 1. Copy the files into the `media` folder:
    - `media/audio/`: songs (`.mp3` or `.m4a`)
    - `media/covers/`: cover art (`.jpg` or `.png`, square works best)
    - `media/video/`: the music video (`.mp4`). A YouTube link can be used instead.
+   - Files can also live in Cloudflare R2: use their full public links in `catalog.js`.
 2. Open `catalog.js` and list them. File names must match exactly, including capital letters.
 3. Reload the page. The tracklist, player, release sleeve and video update automatically.
    Anything left empty shows a "coming soon" state.

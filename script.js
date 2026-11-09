@@ -1,8 +1,7 @@
 /* 368 Leoz Entertainment — interactions
-   1. Mobile menu (unchanged behaviour)
-   2. Player overlay + mini player (unchanged behaviour, focus fix)
-   3. Choreography: line reveals, scroll-linked art, marquee velocity,
-      nav progress / auto-hide, magnetic buttons, nebula pointer drift */
+   Runs once:    mobile menu, player overlay, mini player, nav progress, marquee speed
+   Runs per page (first load and after router.js swaps a page):
+                 line reveals, fit guard, scroll-linked art, magnetic buttons, nebula drift */
 
 document.documentElement.classList.add('js');
 
@@ -35,7 +34,6 @@ function openPlayer() {
   overlay.classList.add('active');
   overlay.setAttribute('aria-hidden', 'false');
   document.body.classList.add('overlay-open');
-  // wait a frame so the dialog is visible before moving focus into it
   requestAnimationFrame(() => requestAnimationFrame(() => closeBtn.focus()));
 }
 function closePlayer() {
@@ -44,7 +42,7 @@ function closePlayer() {
   document.body.classList.remove('overlay-open');
   previousFocus?.focus();
 }
-document.getElementById('openPlayer').addEventListener('click', openPlayer);
+document.addEventListener('click', e => { if (e.target.closest('[data-open-player]')) openPlayer(); });
 document.getElementById('expandPlayer').addEventListener('click', openPlayer);
 closeBtn.addEventListener('click', closePlayer);
 
@@ -61,80 +59,55 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* mini player appears once the listening room has scrolled past */
+/* ---------- 3. Mini player: shows once a song has started, unless the
+   page's own listening room is on screen; parks over the footer ---------- */
 const mini = document.getElementById('miniPlayer');
-const experience = document.getElementById('experience');
-new IntersectionObserver(entries => {
-  for (const entry of entries) {
-    const on = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-    mini.classList.toggle('visible', on);
-    document.body.classList.toggle('mini-on', on);
-  }
-}, { threshold: 0 }).observe(experience);
-/* park it while the footer is on screen so it never covers footer links */
-new IntersectionObserver(([entry]) => mini.classList.toggle('parked', entry.isIntersecting), { threshold: 0 })
+let roomVisible = false;
+let footerVisible = false;
+function updateMini() {
+  const on = (window.LeozPlayer?.hasTrack || false) && !roomVisible;
+  mini.classList.toggle('visible', on);
+  mini.classList.toggle('parked', footerVisible);
+  document.body.classList.toggle('mini-on', on);
+}
+new IntersectionObserver(([entry]) => { footerVisible = entry.isIntersecting; updateMini(); }, { threshold: 0 })
   .observe(document.querySelector('.footer'));
+const roomObserver = new IntersectionObserver(entries => {
+  for (const entry of entries) roomVisible = entry.isIntersecting;
+  updateMini();
+}, { threshold: .25 });
+new MutationObserver(updateMini).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-/* ---------- 3a. Fit guard: no display line may overflow its column ---------- */
-function fitLines() {
-  document.querySelectorAll('.split .line, .footer-wordmark').forEach(line => {
+/* ---------- 4. Fit guard: no display line may overflow its column ---------- */
+function fitLines(root = document) {
+  root.querySelectorAll('.split .line').forEach(line => {
     line.style.fontSize = '';
-    const inner = line.classList.contains('footer-wordmark') ? line : line.firstElementChild;
+    const inner = line.firstElementChild;
     if (!inner) return;
     const parentCs = getComputedStyle(line.parentElement);
     const box = line.parentElement.clientWidth - parseFloat(parentCs.paddingLeft) - parseFloat(parentCs.paddingRight);
-    const pad = line.classList.contains('footer-wordmark') ? 0 : parseFloat(getComputedStyle(line).paddingLeft) - parseFloat(getComputedStyle(line).paddingRight);
+    const pad = parseFloat(getComputedStyle(line).paddingLeft) - parseFloat(getComputedStyle(line).paddingRight);
     const avail = box - Math.max(0, pad);
     const w = inner.scrollWidth;
-    if (line.classList.contains('footer-wordmark')) {
-      const size = parseFloat(getComputedStyle(line).fontSize);
-      line.style.fontSize = (size * (avail / w) * 0.995) + 'px';
-    } else if (w > avail) {
+    if (w > avail) {
       const size = parseFloat(getComputedStyle(line).fontSize);
       line.style.fontSize = Math.floor(size * (avail / w) * 0.98) + 'px';
     }
   });
 }
-
-/* ---------- 3b. Reveals ---------- */
-const revealTargets = document.querySelectorAll('.split, [data-reveal]');
-if ('IntersectionObserver' in window && !reduceMotion) {
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
-    });
-  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-  revealTargets.forEach(el => io.observe(el));
-} else {
-  revealTargets.forEach(el => el.classList.add('in'));
-}
-
-const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-fontsReady.then(() => {
-  fitLines();
-  // hero headline plays on load rather than waiting for intersection
-  document.querySelector('.hero h1')?.classList.add('in');
-});
 let resizeTimer;
-window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitLines, 150); });
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => fitLines(), 150); });
 
-/* ---------- 3c. Scroll choreography ---------- */
+/* ---------- 5. Scroll choreography (page parts are re-bound on every page) ---------- */
 const nav = document.querySelector('.nav');
-const releaseStage = document.querySelector('.release-stage');
-const releaseArt = document.querySelector('.release-art');
-const parallaxEls = [...document.querySelectorAll('[data-parallax]')];
-const marqueeAnim = document.querySelector('.marquee-track')?.getAnimations?.()[0];
-
-let lastY = window.scrollY;
-let velocity = 0;
-let ticking = false;
+let releaseStage = null, releaseArt = null, parallaxEls = [], marqueeAnim = null;
+let lastY = window.scrollY, velocity = 0, ticking = false;
 
 function onScroll() {
   const y = window.scrollY;
   const max = document.documentElement.scrollHeight - window.innerHeight;
   nav.style.setProperty('--progress', max > 0 ? (y / max).toFixed(4) : 0);
 
-  // hide nav while travelling down, reveal on the way up
   const dy = y - lastY;
   if (y > window.innerHeight * .6 && dy > 4) document.body.classList.add('nav-hidden');
   else if (dy < -4 || y < 120) document.body.classList.remove('nav-hidden');
@@ -142,7 +115,6 @@ function onScroll() {
   lastY = y;
 
   if (!reduceMotion) {
-    // record slides out of the sleeve as the release scrolls through view
     if (releaseStage) {
       const r = releaseStage.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -161,36 +133,89 @@ function onScroll() {
 window.addEventListener('scroll', () => {
   if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
 }, { passive: true });
-onScroll();
 
 /* marquee speeds up with scroll velocity, then settles */
-if (marqueeAnim && !reduceMotion) {
+if (!reduceMotion) {
   let rate = 1;
   (function tick() {
     const target = 1 + Math.min(5, Math.abs(velocity) * .12);
     rate += (target - rate) * .08;
     velocity *= .9;
-    marqueeAnim.playbackRate = rate;
+    if (marqueeAnim) marqueeAnim.playbackRate = rate;
     requestAnimationFrame(tick);
   })();
 }
 
-/* ---------- 3d. Pointer micro-interactions ---------- */
-if (finePointer && !reduceMotion) {
-  document.querySelectorAll('.magnetic').forEach(el => {
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - (r.left + r.width / 2);
-      const y = e.clientY - (r.top + r.height / 2);
-      el.style.transform = `translate(${x * .3}px, ${y * .3}px)`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-  });
-
-  const glow = experience.querySelector('.nebula i:nth-child(2)');
-  experience.addEventListener('pointermove', e => {
-    const r = experience.getBoundingClientRect();
-    glow.style.setProperty('--nx', ((e.clientX - r.left) / r.width - .4) * 40 + 'vw');
-    glow.style.setProperty('--ny', ((e.clientY - r.top) / r.height - .55) * 50 + 'vh');
+/* ---------- 6. Nav: mark the current page ---------- */
+function pageName(path) {
+  const m = path.match(/\/(music|videos|artists|about)(\.html)?\/?$/);
+  return m ? m[1] : 'home';
+}
+function markNav() {
+  const here = pageName(location.pathname);
+  document.querySelectorAll('.desktop-nav a, .mobile-menu a[data-page]').forEach(a => {
+    const same = a.dataset.page === here;
+    a.classList.toggle('is-active', same);
+    if (same) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
 }
+
+/* ---------- 7. Per-page setup ---------- */
+let revealObserver = null;
+function initPage(root) {
+  markNav();
+
+  const targets = root.querySelectorAll('.split, [data-reveal]');
+  revealObserver?.disconnect();
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    targets.forEach(el => revealObserver.observe(el));
+  } else {
+    targets.forEach(el => el.classList.add('in'));
+  }
+
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    fitLines(root);
+    root.querySelector('.hero h1, .page-hero h1')?.classList.add('in');
+  });
+
+  releaseStage = root.querySelector('.release-stage');
+  releaseArt = root.querySelector('.release-art');
+  parallaxEls = [...root.querySelectorAll('[data-parallax]')];
+  marqueeAnim = root.querySelector('.marquee-track')?.getAnimations?.()[0] || null;
+
+  roomObserver.disconnect();
+  roomVisible = false;
+  const room = root.querySelector('.player-cover');
+  if (room) roomObserver.observe(room);
+  updateMini();
+
+  if (finePointer && !reduceMotion) {
+    root.querySelectorAll('.magnetic').forEach(el => {
+      el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * .3}px, ${(e.clientY - (r.top + r.height / 2)) * .3}px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
+    const experience = root.querySelector('.experience');
+    const glow = experience?.querySelector('.nebula i:nth-child(2)');
+    if (glow) {
+      experience.addEventListener('pointermove', e => {
+        const r = experience.getBoundingClientRect();
+        glow.style.setProperty('--nx', ((e.clientX - r.left) / r.width - .4) * 40 + 'vw');
+        glow.style.setProperty('--ny', ((e.clientY - r.top) / r.height - .55) * 50 + 'vh');
+      });
+    }
+  }
+
+  lastY = window.scrollY;
+  onScroll();
+}
+
+window.LeozSite = { initPage, closeMenu };
+initPage(document.querySelector('main'));
