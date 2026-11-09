@@ -1,0 +1,26 @@
+# Environment files
+.env
+.env.*
+.envlocal
+
+# Media content (originals stored elsewhere)
+media/368 Leoz media content/
+**/368 Leoz media content/
+
+# Shrunk output (if created in repo)
+368leoz-web/
+
+# Next.js
+.next/
+next-env.d.ts
+
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Keep README files in media folders
+!media/audio/README.txt
+!media/covers/README.txt
+!media/video/README.txt
