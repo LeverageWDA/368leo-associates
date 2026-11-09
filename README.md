@@ -23,6 +23,10 @@ Then visit http://localhost:3000.
 Moving between pages doesn't reload the site (`router.js`), so a song keeps playing.
 The header, footer and players are the same on every page: if you change them, change all five files.
 
+After changing `styles.css` or any `.js` file, change the `?v=...` number on their links in all five pages
+(for example `?v=20261109b` to `?v=20261110a`), so visitors' browsers fetch the new version instead of an old saved copy.
+`catalog.js` has the same number, so bump it after adding songs too.
+
 ## Adding songs, cover art and the music video
 
 1. Copy the files into the `media` folder:
