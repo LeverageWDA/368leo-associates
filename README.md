@@ -57,6 +57,13 @@ tools to find the file address). To protect masters, only upload web-quality ver
 a short preview clip. For stronger protection, stream through a service with signed, expiring
 links (for example Mux or Cloudflare Stream) or embed from YouTube, SoundCloud or Audiomack.
 
+## Social links
+
+Instagram, TikTok, YouTube, Spotify and the email address live in the `social` section at the top of `catalog.js`.
+They appear as icons in every footer and as cards on the Contact page. Leave a link empty (`""`) to hide it,
+for example Spotify until there is a page to link to. The icons come from the Simple Icons library on jsDelivr;
+if they can't load, the buttons show IG / TT / YT / SP instead.
+
 ## Link previews and icons
 
 - `favicon.ico`, `assets/brand/icon-192.png`, `icon-512.png` and `apple-touch-icon.png` are the browser and phone icons.

@@ -14,6 +14,15 @@
    ---------------------------------------------------------------------- */
 
 window.LEOZ_CATALOG = {
+  // Social links shown in the footer and on the Contact page. Leave a link empty ("") to hide it.
+  social: {
+    instagram: "https://www.instagram.com/368leoz_entertainment/",
+    tiktok: "https://www.tiktok.com/@leoz_ent",
+    youtube: "https://www.youtube.com/@368leozent",
+    spotify: "",        // paste the Spotify artist or playlist link here when there is one
+    email: "mazleo368@gmail.com"
+  },
+
   release: {
     title: "368 Leoz Entertainment Presents",
     artist: "Various Artists",

@@ -160,7 +160,38 @@ function markNav() {
   });
 }
 
-/* ---------- 7. Per-page setup ---------- */
+/* ---------- 7. Social links (footer once, Contact page per page) ---------- */
+const SOCIAL = (window.LEOZ_CATALOG || {}).social || {};
+const NETWORKS = [
+  ['instagram', 'Instagram'],
+  ['tiktok', 'TikTok'],
+  ['youtube', 'YouTube'],
+  ['spotify', 'Spotify'],
+];
+const ICON_CDN = 'https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/';
+const MAIL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3 5.5h18v13H3z M3.5 6l8.5 7 8.5-7"/></svg>';
+const escAttr = v => String(v).replace(/[&"<>]/g, c => ({ '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' }[c]));
+const handleOf = url => { try { const seg = new URL(url).pathname.split('/').filter(Boolean)[0] || ''; return seg ? (seg.startsWith('@') ? seg : '@' + seg) : ''; } catch { return ''; } };
+const SHORT = { instagram: 'IG', tiktok: 'TT', youtube: 'YT', spotify: 'SP' };
+// If the icon can't load, the button falls back to short text (IG, TT, YT, SP)
+const icon = key => key === 'email' ? MAIL_ICON :
+  `<img src="${ICON_CDN}${key}.svg" alt="" width="20" height="20" loading="lazy" onerror="this.parentNode.classList.add('no-icon');this.remove()" /><span class="ico-fallback" aria-hidden="true">${SHORT[key]}</span>`;
+
+function renderSocial(root) {
+  const links = NETWORKS.filter(([k]) => SOCIAL[k]);
+  root.querySelectorAll('[data-socials]').forEach(box => {
+    box.innerHTML = links.map(([k, name]) =>
+      `<a class="social-btn" href="${escAttr(SOCIAL[k])}" target="_blank" rel="noopener" aria-label="${name}" title="${name}">${icon(k)}</a>`).join('') +
+      (SOCIAL.email ? `<a class="social-btn" href="mailto:${escAttr(SOCIAL.email)}" aria-label="Email" title="Email">${icon('email')}</a>` : '');
+  });
+  root.querySelectorAll('[data-social-cards]').forEach(box => {
+    box.innerHTML = links.map(([k, name]) =>
+      `<a class="contact-card" href="${escAttr(SOCIAL[k])}" target="_blank" rel="noopener"><span class="contact-card-label"><b class="social-ico">${icon(k)}</b>${name.toUpperCase()}</span><strong>${escAttr(k === 'spotify' ? 'Listen on Spotify' : handleOf(SOCIAL[k]))}</strong><i aria-hidden="true">↗</i></a>`).join('');
+  });
+}
+renderSocial(document.querySelector('.footer'));
+
+/* ---------- 8. Per-page setup ---------- */
 let revealObserver = null;
 function initPage(root) {
   markNav();
@@ -212,6 +243,8 @@ function initPage(root) {
       });
     }
   }
+
+  renderSocial(root);
 
   const form = root.querySelector('#contactForm');
   if (form) {

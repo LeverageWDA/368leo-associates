@@ -1306,3 +1306,59 @@ a.contact-card-main:hover { background: var(--bright); border-color: var(--brigh
   .rights-grid { grid-template-columns: 1fr; }
   .contact-form { padding: 22px; }
 }
+
+/* ==========================================================================
+   FOOTER v3: centered, evenly spaced
+   ========================================================================== */
+.footer { padding: 70px var(--gutter) 34px; text-align: center; }
+.footer-inner { display: flex; flex-direction: column; align-items: center; max-width: 880px; margin: 0 auto; }
+.footer-logo-link { display: inline-block; }
+.footer-logo { width: 104px; height: auto; display: block; margin: 0 auto; }
+.footer-tagline { margin: 16px 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: .32em; color: var(--gold-text); }
+.footer .footer-nav {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 40px;
+  margin: 38px 0 0; padding: 26px 0; width: 100%;
+  border-top: 1px solid #d7d3c8; border-bottom: 1px solid #d7d3c8;
+  font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+}
+.footer .footer-social { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 32px 0 0; font: inherit; }
+.social-btn {
+  display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--ink); color: #fff; transition: background .3s, transform .3s var(--ease);
+}
+.social-btn img, .social-btn svg { width: 20px; height: 20px; display: block; }
+.social-btn img { filter: invert(1); transition: filter .3s; }
+.social-btn:hover, .social-btn:focus-visible { background: var(--gold); color: var(--ink); transform: translateY(-3px); }
+.social-btn:hover img, .social-btn:focus-visible img { filter: none; }
+.footer .footer-legal { max-width: 640px; margin: 30px auto 0; font-size: 12.5px; line-height: 1.7; color: var(--muted); }
+.footer-bottom {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 36px; margin-top: 28px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.footer-bottom a:hover { color: var(--gold-text); }
+.footer .footer-credit {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  max-width: 880px; margin: 40px auto 0; padding: 22px 24px; text-align: center;
+}
+.footer .footer-credit span { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; }
+.footer .footer-credit strong { font-size: 24px; }
+
+/* contact page social cards */
+.contact-social { display: grid; gap: 14px; }
+.contact-card-label { display: flex; align-items: center; gap: 10px; }
+.social-ico { display: inline-grid; place-items: center; width: 22px; height: 22px; }
+.social-ico img, .social-ico svg { width: 18px; height: 18px; filter: invert(1); }
+.social-ico svg { filter: none; color: #fff; }
+
+@media (max-width: 600px) {
+  .footer { padding: 54px var(--gutter) 26px; }
+  .footer-logo { width: 88px; }
+  .footer .footer-nav { gap: 14px 24px; font-size: 13px; padding: 22px 0; }
+  .footer-bottom { flex-direction: column; align-items: center; gap: 10px; }
+  .footer .footer-credit strong { font-size: 21px; }
+}
+.footer .footer-social a.social-btn { border: 0; padding: 0; color: #fff; }
+.footer .footer-social a.social-btn:hover, .footer .footer-social a.social-btn:focus-visible { color: var(--ink); }
+.ico-fallback { display: none; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .04em; }
+.no-icon > .ico-fallback { display: block; }
+.social-ico.no-icon .ico-fallback { font-size: 10px; color: #fff; }
